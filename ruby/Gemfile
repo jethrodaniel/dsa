@@ -11,3 +11,5 @@ gem "rake"      # dev/test CLI, build system
 gem "rspec"     # testing
 gem "simplecov" # coverage
 gem "standard"  # linting
+gem "webrick"   # for `yard server`
+gem "yard"      # documentation

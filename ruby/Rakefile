@@ -5,4 +5,12 @@ RSpec::Core::RakeTask.new(:spec)
 
 require "standard/rake"
 
+require "yard"
+
+YARD::Rake::YardocTask.new
+
+task :doc do
+  sh "bundle exec yard server --reload"
+end
+
 task default: %i[spec standard]
