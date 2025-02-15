@@ -8,30 +8,26 @@ RSpec.describe DSA::SingleNode do
 
   describe "#value=" do
     it "updates the value" do
-      head = described_class.new(value: 1)
+      head = list
 
       expect(head.value).to eq 1
-      expect(head.next).to be_nil
 
       head.value = 42
 
       expect(head.value).to eq 42
-      expect(head.next).to be_nil
     end
   end
 
   describe "#next=" do
     it "updates the pointer to the next node" do
-      head = described_class.new(value: 1)
+      head = list
 
       expect(head.value).to eq 1
+      expect(head.next).not_to be_nil
+
+      head.next = nil
+
       expect(head.next).to be_nil
-
-      head.next = described_class.new(value: 2)
-
-      expect(head.value).to eq 1
-      expect(head.next.value).to eq 2
-      expect(head.next.next).to be_nil
     end
   end
 
@@ -114,13 +110,15 @@ RSpec.describe DSA::SingleNode do
     context "when index is the length of the list - 1" do
       it "returns the last element" do
         head = list
-        head.next = tail = described_class.new(value: 2)
 
         expect(head.value).to eq 1
         expect(head.next.value).to eq 2
-        expect(head.next.next).to be_nil
+        expect(head.next.next.value).to eq 3
+        expect(head.next.next.next).to be_nil
 
-        node = head[1]
+        tail = head.next.next
+
+        node = head[2]
         expect(node).to eq(tail)
       end
     end
