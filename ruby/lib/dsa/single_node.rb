@@ -74,7 +74,7 @@ module DSA
 
     # Delete an element
     #
-    # Time: O(1), since we just have to iterate the list to find the node.
+    # Time: O(n), since we have to iterate the list to find the node.
     # Space: O(1), no additional space based on input size
     #
     # @param node [DSA::SingleNode] the node to delete
