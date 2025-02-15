@@ -23,7 +23,7 @@ module DSA
     # @param value [T]
     # @return [DSA::SingleNode] the new node
     #
-    def prepend(value) = DSA::SingleNode.new(value:, next: self)
+    def prepend(value) = self.class.new(value:, next: self)
 
     # Yield each element of the list.
     #
@@ -108,10 +108,10 @@ module DSA
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
       raise ArgumentError, "index must be 0 or greater" unless index >= 0
 
-      return DSA::SingleNode.new(value:, next: self) if index.zero?
+      return self.class.new(value:, next: self) if index.zero?
 
       each.with_index do |item, i|
-        return item.next = DSA::SingleNode.new(value:, next: item.next) if i + 1 == index
+        return item.next = self.class.new(value:, next: item.next) if i + 1 == index
       end
 
       raise ArgumentError, "index is too large"
@@ -128,7 +128,7 @@ module DSA
     def append value
       last = self
       each { |item| last = item }
-      last.next = DSA::SingleNode.new(value:)
+      last.next = self.class.new(value:)
     end
 
     # Check if an element exists in the list.
