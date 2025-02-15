@@ -317,4 +317,20 @@ RSpec.describe DSA::SingleNode do
       expect(head.next.next.next.next).to be_nil
     end
   end
+
+  describe "#include?" do
+    it "returns whether an element exists in the list" do
+      head = list
+
+      expect(head.value).to eq 1
+      expect(head.next.value).to eq 2
+      expect(head.next.next.value).to eq 3
+      expect(head.next.next.next).to be_nil
+
+      expect(head.include?(1)).to be true
+      expect(head.include?(2)).to be true
+      expect(head.include?(3)).to be true
+      expect(head.include?(42)).to be false
+    end
+  end
 end
