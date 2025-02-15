@@ -4,9 +4,12 @@ module DSA
   # head -> body -> tail -> nil
   #
   class SingleNode
-    attr_accessor :next
-    attr_reader :value
+    attr_accessor :next, :value
 
+    # @param value [T] An element to store in the list
+    # @param next [DSA::SingleNode, nil] The next node in the list
+    # @return [DSA::SingleNode] The new node
+    #
     def initialize value:, next: nil
       @value = value
       @next = binding.local_variable_get(:next)

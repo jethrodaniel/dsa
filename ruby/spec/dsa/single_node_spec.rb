@@ -1,4 +1,33 @@
 RSpec.describe DSA::SingleNode do
+  describe "#value=" do
+    it "updates the value" do
+      head = described_class.new(value: 1)
+
+      expect(head.value).to eq 1
+      expect(head.next).to be_nil
+
+      head.value = 42
+
+      expect(head.value).to eq 42
+      expect(head.next).to be_nil
+    end
+  end
+
+  describe "#next=" do
+    it "updates the pointer to the next node" do
+      head = described_class.new(value: 1)
+
+      expect(head.value).to eq 1
+      expect(head.next).to be_nil
+
+      head.next = described_class.new(value: 2)
+
+      expect(head.value).to eq 1
+      expect(head.next.value).to eq 2
+      expect(head.next.next).to be_nil
+    end
+  end
+
   describe "#prepend" do
     let(:list) do
       head = described_class.new(value: 1)
