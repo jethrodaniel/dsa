@@ -6,7 +6,7 @@ module DSA
   class SingleNode
     attr_accessor :next, :value
 
-    # @param value [T] An element to store in the list
+    # @param value [T] An element of type `T` to store in the list
     # @param next [DSA::SingleNode, nil] The next node in the list
     # @return [DSA::SingleNode] The new node
     #
@@ -30,6 +30,7 @@ module DSA
     # Time: O(n), since we iterate the list
     # Space: O(1), no additional space based on input size
     #
+    # @yield [DSA::SingleNode] each element of the list, if a block is given
     # @return [Enumerator<DSA::SingleNode>] if no block is given
     #
     def each
