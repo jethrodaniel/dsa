@@ -1,4 +1,11 @@
 RSpec.describe DSA::SingleNode do
+  let(:list) do
+    head = described_class.new(value: 1)
+    head.next = middle = described_class.new(value: 2)
+    middle.next = described_class.new(value: 3)
+    head
+  end
+
   describe "#value=" do
     it "updates the value" do
       head = described_class.new(value: 1)
@@ -29,42 +36,32 @@ RSpec.describe DSA::SingleNode do
   end
 
   describe "#prepend" do
-    let(:list) do
-      head = described_class.new(value: 1)
-      head.next = DSA::SingleNode.new(value: 2)
-      head
-    end
-
     it "prepends to the beginning of the list" do
       head = list
 
       expect(head.value).to eq 1
       expect(head.next.value).to eq 2
-      expect(head.next.next).to be_nil
+      expect(head.next.next.value).to eq 3
+      expect(head.next.next.next).to be_nil
 
       head = head.prepend 42 # rubocop:disable Style/RedundantSelfAssignment
 
       expect(head.value).to eq 42
       expect(head.next.value).to eq 1
       expect(head.next.next.value).to eq 2
-      expect(head.next.next.next).to be_nil
+      expect(head.next.next.next.value).to eq 3
+      expect(head.next.next.next.next).to be_nil
     end
   end
 
   describe "#each" do
-    let(:list) do
-      head = described_class.new(value: 1)
-      head.next = DSA::SingleNode.new(value: 2)
-      head
-    end
-
     context "when given a block" do
       it "calls the block for each element" do
         items = []
 
         list.each { |item| items << item.value } # rubocop:disable Style/MapIntoArray
 
-        expect(items).to eq [1, 2]
+        expect(items).to eq [1, 2, 3]
       end
     end
 
@@ -76,20 +73,12 @@ RSpec.describe DSA::SingleNode do
   end
 
   describe "#length" do
-    let(:list) do
-      head = described_class.new(value: 1)
-      head.next = DSA::SingleNode.new(value: 2)
-      head
-    end
-
     it "returns the number of items in the list" do
-      expect(list.length).to eq 2
+      expect(list.length).to eq 3
     end
   end
 
   describe "#[]" do
-    let(:list) { described_class.new(value: 1) }
-
     context "when index is invalid" do
       it "errors" do
         expect { list[nil] }.to raise_error(ArgumentError, "index must be an integer")
@@ -113,7 +102,9 @@ RSpec.describe DSA::SingleNode do
         head = list
 
         expect(head.value).to eq 1
-        expect(head.next).to be_nil
+        expect(head.next.value).to eq 2
+        expect(head.next.next.value).to eq 3
+        expect(head.next.next.next).to be_nil
 
         node = head[0]
         expect(node).to eq(head)
@@ -311,25 +302,21 @@ RSpec.describe DSA::SingleNode do
   end
 
   describe "#append" do
-    let(:list) do
-      head = described_class.new(value: 1)
-      head.next = DSA::SingleNode.new(value: 2)
-      head
-    end
-
     it "appends to the end of the list" do
       head = list
 
       expect(head.value).to eq 1
       expect(head.next.value).to eq 2
-      expect(head.next.next).to be_nil
+      expect(head.next.next.value).to eq 3
+      expect(head.next.next.next).to be_nil
 
       head.append 42
 
       expect(head.value).to eq 1
       expect(head.next.value).to eq 2
-      expect(head.next.next.value).to eq 42
-      expect(head.next.next.next).to be_nil
+      expect(head.next.next.value).to eq 3
+      expect(head.next.next.next.value).to eq 42
+      expect(head.next.next.next.next).to be_nil
     end
   end
 end
