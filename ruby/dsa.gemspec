@@ -11,8 +11,12 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
 
   spec.summary = "Data structures and algorithms"
-  spec.files = [
-    "lib/dsa/version.rb"
+  spec.files = %w[
+    README.md
+    LICENSE.txt
+    lib/dsa.rb
+    lib/dsa/single_node.rb
+    lib/dsa/version.rb
   ]
   spec.require_paths = ["lib"]
 end
