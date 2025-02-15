@@ -2,11 +2,12 @@ source "https://rubygems.org"
 
 gemspec
 
+# debugging
 gem "debug", ">= 1.0.0"
-gem "minitest"
 gem "pry"
 gem "pry-byebug"
-gem "rake"
-gem "rspec"
-gem "simplecov"
-gem "standard"
+
+gem "rake"      # dev/test CLI, build system
+gem "rspec"     # testing
+gem "simplecov" # coverage
+gem "standard"  # linting
