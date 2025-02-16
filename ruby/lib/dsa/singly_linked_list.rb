@@ -52,7 +52,7 @@ module DSA
     def each
       return to_enum(__method__) unless block_given?
 
-      return unless @root
+      return if empty?
 
       curr = @root
 
@@ -148,7 +148,7 @@ module DSA
     # @return [DSA::SinglyLinkedList] the new back node
     #
     def append value
-      return @root = Node.new(value:) unless @root
+      return @root = Node.new(value:) if empty?
 
       last = @root
       each { |item| last = item }

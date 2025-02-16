@@ -45,7 +45,7 @@ module DSA
     # @return [DSA::DoublyLinkedList::Node] the new front node
     #
     def prepend value
-      return @root = Node.new(value:, next: @root) unless @root
+      return @root = Node.new(value:, next: @root) if empty?
 
       old_root = @root
       new_root = Node.new(value:, next: @root)
@@ -62,7 +62,7 @@ module DSA
     # @return [DSA::DoublyLinkedList::Node] the new back node
     #
     def append value
-      return @root = Node.new(value:, next: @root) unless @root
+      return @root = Node.new(value:, next: @root) if empty?
 
       last = @root
       each { |item| last = item }
@@ -80,7 +80,7 @@ module DSA
     def each
       return to_enum(__method__) unless block_given?
 
-      return unless @root
+      return if empty?
 
       curr = @root
 
