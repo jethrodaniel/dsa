@@ -6,6 +6,8 @@ module DSA
   class SingleNode
     attr_accessor :next, :value
 
+    # Create a new node of type `T`.
+    #
     # @param value [T] An element of type `T` to store in the list
     # @param next [DSA::SingleNode, nil] The next node in the list
     # @return [DSA::SingleNode] The new node
@@ -17,8 +19,8 @@ module DSA
 
     # Add an element to the beginning of the list.
     #
-    # Time: O(1), since we don't have to iterate the list.
-    # Space: O(1), no additional space based on input size
+    # - Time: O(1), since we don't have to iterate the list.
+    # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @return [DSA::SingleNode] the new node
@@ -27,8 +29,8 @@ module DSA
 
     # Yield each element of the list.
     #
-    # Time: O(n), since we iterate the list
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), since we iterate the list
+    # - Space: O(1), no additional space based on input size
     #
     # @yield [DSA::SingleNode] each element of the list, if a block is given
     # @return [Enumerator<DSA::SingleNode>] if no block is given
@@ -48,8 +50,8 @@ module DSA
 
     # Count how many items are in the list
     #
-    # Time: O(n), since we have to iterate the list and count the items.
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), since we have to iterate the list and count the items.
+    # - Space: O(1), no additional space based on input size
     #
     # @return [Integer] the list length
     #
@@ -57,8 +59,8 @@ module DSA
 
     # Get the node at the given index
     #
-    # Time: O(n), since we have to iterate the list to find the node at that index
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), since we have to iterate the list to find the node at that index
+    # - Space: O(1), no additional space based on input size
     #
     # @return [DSA::SingleNode] the node at that index
     #
@@ -75,8 +77,8 @@ module DSA
 
     # Delete an element
     #
-    # Time: O(n), since we have to iterate the list to find the node.
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), since we have to iterate the list to find the node.
+    # - Space: O(1), no additional space based on input size
     #
     # @param node [DSA::SingleNode] the node to delete
     # @return [DSA::SingleNode] the deleted node
@@ -98,8 +100,8 @@ module DSA
 
     # Insert an element at the given index.
     #
-    # Time: O(n), we have to iterate the list to find where to insert the node
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), we have to iterate the list to find where to insert the node
+    # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @param index [Integer]
@@ -120,8 +122,8 @@ module DSA
 
     # Append an element to the end of the list.
     #
-    # Time: O(n), since we have to find the last node
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), since we have to find the last node
+    # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @return [DSA::SingleNode] the new node
@@ -134,8 +136,8 @@ module DSA
 
     # Check if an element exists in the list.
     #
-    # Time: O(n), since we have to find the first node containing the element
-    # Space: O(1), no additional space based on input size
+    # - Time: O(n), since we have to find the first node containing the element
+    # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @return [bool] if the element exists in the list
