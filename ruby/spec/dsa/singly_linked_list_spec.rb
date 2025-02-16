@@ -143,7 +143,7 @@ RSpec.describe DSA::SinglyLinkedList do
   describe "#delete" do
     let(:list) do
       head = described_class.new(value: 1)
-      head.next = DSA::SinglyLinkedList.new(value: 2)
+      head.next = described_class.new(value: 2)
       head
     end
 
@@ -254,7 +254,7 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(head.next).to be_nil
 
         new_node = head.insert value: 42, index: 0
-        expect(new_node).to be_an_instance_of(DSA::SinglyLinkedList)
+        expect(new_node).to be_an_instance_of(described_class)
 
         head = new_node
         expect(head.value).to eq 42
@@ -271,7 +271,7 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(head.next).to be_nil
 
         new_node = head.insert value: 42, index: 1
-        expect(new_node).to be_an_instance_of(DSA::SinglyLinkedList)
+        expect(new_node).to be_an_instance_of(described_class)
 
         expect(head.value).to eq 1
         expect(head.next.value).to eq 42
@@ -289,7 +289,7 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(head.next.next).to be_nil
 
         new_node = head.insert value: 42, index: 1
-        expect(new_node).to be_an_instance_of(DSA::SinglyLinkedList)
+        expect(new_node).to be_an_instance_of(described_class)
 
         expect(head.value).to eq 1
         expect(head.next.value).to eq 42
