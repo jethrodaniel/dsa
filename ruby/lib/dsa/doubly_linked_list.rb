@@ -38,7 +38,7 @@ module DSA
 
     # Add an element to the front of the list.
     #
-    # - Time: O(1), since we don't have to iterate the list.
+    # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
@@ -55,14 +55,14 @@ module DSA
 
     # Add an element to the end of the list.
     #
-    # - Time: O(1), since we don't have to iterate the list.
+    # - Time: O(n), since we have to find the last node
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @return [DSA::DoublyLinkedList::Node] the new back node
     #
     def append value
-      return @root = Node.new(value:, next: @root) if empty?
+      return @root = Node.new(value:) if empty?
 
       last = @root
       each { |item| last = item }
@@ -97,16 +97,13 @@ module DSA
     # - Time: O(n), since we iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @note `node` must be a member of the list.
-    #
+    # @note `node` must be a member of the list
     # @param [DSA::DoublyLinkedList::Node] a member of the list
     # @yield [DSA::DoublyLinkedList::Node] each prior element, if a block is given
     # @return [Enumerator<DSA::DoublyLinkedList::Node>] if no block is given
     #
     def reverse_each node
       return to_enum(__method__, node) unless block_given?
-
-      return unless node
 
       curr = node
 
@@ -120,7 +117,7 @@ module DSA
 
     # Count how many items are in the list
     #
-    # - Time: O(n), since we have to iterate the list and count the items.
+    # - Time: O(n), since we have to iterate the list and count the items
     # - Space: O(1), no additional space based on input size
     #
     # @return [Integer] the list length
@@ -147,7 +144,7 @@ module DSA
 
     # Delete an element
     #
-    # - Time: O(1), since we don't have to iterate the list
+    # - Time: O(n), since we have to iterate the list to find the previous node
     # - Space: O(1), no additional space based on input size
     #
     # @param node [DSA::DoublyLinkedList::Node] the node to delete
@@ -167,7 +164,7 @@ module DSA
 
     # Insert an element at the given index.
     #
-    # - Time: O(n), we have to iterate the list to find where to insert the node
+    # - Time: O(n), we have to iterate the list to find the previous index's node
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]

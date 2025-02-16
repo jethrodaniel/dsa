@@ -49,10 +49,12 @@ RSpec.describe DSA::SinglyLinkedList do
         list = described_class.new
         list.prepend 2
         list.prepend 1
-
         items = list.each.map(&:value)
-
         expect(items).to eq [1, 2]
+
+        empty_list = described_class.new
+        items = empty_list.each.map(&:value)
+        expect(items).to eq []
       end
     end
 
@@ -165,6 +167,7 @@ RSpec.describe DSA::SinglyLinkedList do
     context "when the node isn't in the list" do
       it "errors" do
         list = described_class.new
+        list.prepend 1
         node = described_class::Node.new(value: 42)
 
         expect { list.delete(node: node) }

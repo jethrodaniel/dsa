@@ -68,10 +68,12 @@ RSpec.describe DSA::DoublyLinkedList do
         list = described_class.new
         list.prepend 2
         list.prepend 1
-
         items = list.each.map(&:value)
-
         expect(items).to eq [1, 2]
+
+        empty_list = described_class.new
+        items = empty_list.each.map(&:value)
+        expect(items).to eq []
       end
     end
 

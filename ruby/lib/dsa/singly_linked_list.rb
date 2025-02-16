@@ -31,7 +31,7 @@ module DSA
 
     # Add an element to the front of the list.
     #
-    # - Time: O(1), since we don't have to iterate the list.
+    # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
@@ -66,7 +66,7 @@ module DSA
 
     # Count how many items are in the list
     #
-    # - Time: O(n), since we have to iterate the list and count the items.
+    # - Time: O(n), since we have to iterate the list and count the items
     # - Space: O(1), no additional space based on input size
     #
     # @return [Integer] the list length
@@ -93,7 +93,7 @@ module DSA
 
     # Delete an element
     #
-    # - Time: O(n), since we have to iterate the list to find the node.
+    # - Time: O(n), since we have to iterate the list to find the previous node
     # - Space: O(1), no additional space based on input size
     #
     # @param node [DSA::SinglyLinkedList] the node to delete
@@ -119,7 +119,7 @@ module DSA
 
     # Insert an element at the given index.
     #
-    # - Time: O(n), we have to iterate the list to find where to insert the node
+    # - Time: O(n), we have to iterate the list to find the previous index's node
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
@@ -170,7 +170,7 @@ module DSA
 
     # Check if the list is empty.
     #
-    # - Time: O(1), since we don't have to iterate the list.
+    # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
     # @return [bool] whether the list is empty
