@@ -16,19 +16,24 @@ module DSA
   #   nil <-      <-      <-      <- nil
   #
   class DoublyLinkedList
-    attr_accessor :prev, :next, :value
+    # @return [DSA::DoublyLinkedList::Node, nil] the root node of the list
+    attr_accessor :root
 
-    # Create a new node of type `T`.
-    #
-    # @param value [T] An element of type `T` to store in the list
-    # @param prev [DSA::DoublyLinkedList, nil] The previous node in the list
-    # @param next [DSA::DoublyLinkedList, nil] The next node in the list
-    # @return [DSA::DoublyLinkedList] The new node
-    #
-    def initialize value:, prev: nil, next: nil
-      @value = value
-      @prev = prev
-      @next = binding.local_variable_get(:next)
+    class Node
+      attr_accessor :prev, :next, :value
+
+      # Create a new node of type `T`.
+      #
+      # @param value [T] An element of type `T` to store in the list
+      # @param prev [DSA::DoublyLinkedList::Node, nil] The previous node in the list
+      # @param next [DSA::DoublyLinkedList::Node, nil] The next node in the list
+      # @return [DSA::DoublyLinkedList::Node] The new node
+      #
+      def initialize value:, prev: nil, next: nil
+        @value = value
+        @prev = prev
+        @next = binding.local_variable_get(:next)
+      end
     end
 
     # Add an element to the front of the list.
@@ -37,9 +42,16 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::DoublyLinkedList] the new front node
+    # @return [DSA::DoublyLinkedList::Node] the new front node
     #
-    def prepend(value) = self.class.new(value:, next: self)
+    def prepend value
+      return @root = Node.new(value:, next: @root) unless @root
+
+      old_root = @root
+      new_root = Node.new(value:, next: @root)
+      old_root.prev = new_root
+      @root = new_root
+    end
 
     # Add an element to the end of the list.
     #
@@ -47,13 +59,14 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::DoublyLinkedList] the new back node
+    # @return [DSA::DoublyLinkedList::Node] the new back node
     #
     def append value
-      # @next = self.class.new(value:, prev: self)
-      last = self
+      return @root = Node.new(value:, next: @root) unless @root
+
+      last = @root
       each { |item| last = item }
-      last.next = self.class.new(value:, prev: last)
+      last.next = Node.new(value:, prev: last)
     end
 
     # Yield each element of the list.
@@ -61,13 +74,15 @@ module DSA
     # - Time: O(n), since we iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @yield [DSA::DoublyLinkedList] each element of the list, if a block is given
-    # @return [Enumerator<DSA::DoublyLinkedList>] if no block is given
+    # @yield [DSA::DoublyLinkedList::Node] each element of the list, if a block is given
+    # @return [Enumerator<DSA::DoublyLinkedList::Node>] if no block is given
     #
     def each
       return to_enum(__method__) unless block_given?
 
-      curr = self
+      return unless @root
+
+      curr = @root
 
       while curr.next
         yield curr
@@ -77,18 +92,23 @@ module DSA
       yield curr
     end
 
-    # Yield each element of the list in reverse order.
+    # Yield each element of the list in reverse order, starting from `node`.
     #
     # - Time: O(n), since we iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @yield [DSA::DoublyLinkedList] each element of the list, if a block is given
-    # @return [Enumerator<DSA::DoublyLinkedList>] if no block is given
+    # @note `node` must be a member of the list.
     #
-    def reverse_each
-      return to_enum(__method__) unless block_given?
+    # @param [DSA::DoublyLinkedList::Node] a member of the list
+    # @yield [DSA::DoublyLinkedList::Node] each prior element, if a block is given
+    # @return [Enumerator<DSA::DoublyLinkedList::Node>] if no block is given
+    #
+    def reverse_each node
+      return to_enum(__method__, node) unless block_given?
 
-      curr = self
+      return unless node
+
+      curr = node
 
       while curr.prev
         yield curr
@@ -130,15 +150,19 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @param node [DSA::DoublyLinkedList] the node to delete
-    # @return [DSA::DoublyLinkedList] the new node
+    # @param node [DSA::DoublyLinkedList::Node] the node to delete
+    # @return [DSA::SinglyLinkedList] the deleted node
     #
     def delete node:
-      raise ArgumentError, "node must be a node" unless node.is_a?(DSA::DoublyLinkedList)
+      raise ArgumentError, "node must be a node" unless node.is_a?(DSA::DoublyLinkedList::Node)
 
-      return node.next if node.prev.nil? # front
+      if @root == node
+        @root = node.next
+      else
+        node.prev.next = node.next
+      end
 
-      node.prev.next = node.next
+      node
     end
 
     # Insert an element at the given index.
@@ -148,16 +172,16 @@ module DSA
     #
     # @param value [T]
     # @param index [Integer]
-    # @return [DSA::DoublyLinkedList] the new node
+    # @return [DSA::DoublyLinkedList::Node] the new node
     #
     def insert value:, index:
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
       raise ArgumentError, "index must be 0 or greater" unless index >= 0
 
-      return self.class.new(value:, next: self) if index.zero?
+      return @root = Node.new(value:, next: @root) if index.zero?
 
       each.with_index do |item, i|
-        return item.next = self.class.new(value:, prev: item, next: item.next) if i + 1 == index
+        return item.next = Node.new(value:, prev: item, next: item.next) if i + 1 == index
       end
 
       raise ArgumentError, "index is too large"
@@ -175,6 +199,15 @@ module DSA
       each { |item| return true if item.value == value }
       false
     end
+
+    # Check if the list is empty.
+    #
+    # - Time: O(1), since we don't have to iterate the list.
+    # - Space: O(1), no additional space based on input size
+    #
+    # @return [bool] whether the list is empty
+    #
+    def empty? = @root.nil?
 
     # Return a string representation of the list
     #

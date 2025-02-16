@@ -13,7 +13,7 @@ module DSA
     # @return [DSA::Stack] The new stack
     #
     def initialize
-      @list = nil
+      @list = DSA::SinglyLinkedList.new
     end
 
     # Push an element on top of the stack.
@@ -22,12 +22,10 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T] an element to push onto the stack
-    # @return [DSA::SinglyLinkedList] the new top of the stack
+    # @return [DSA::SinglyLinkedList::Node] the new top of the stack
     #
     def push value
-      return (@list = @list.prepend(value)) if @list # rubocop:disable Style/RedundantSelfAssignment
-
-      @list = DSA::SinglyLinkedList.new(value:)
+      @list.prepend value
     end
 
     # Return the top of the stack.
@@ -35,12 +33,12 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [DSA::SinglyLinkedList] the top of the stack
+    # @return [DSA::SinglyLinkedList::Node] the top of the stack
     #
     def peek
       raise ArgumentError, "stack must not be empty" if empty?
 
-      @list.value
+      @list.root.value
     end
 
     # Pop an element from the top of the stack.
@@ -48,12 +46,12 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [DSA::SinglyLinkedList] the new top of the stack
+    # @return [DSA::SinglyLinkedList::Node] the new top of the stack
     #
     def pop
       result = peek
 
-      @list = @list.next
+      @list.delete node: @list.root
 
       result
     end
@@ -65,7 +63,7 @@ module DSA
     #
     # @return [bool] whether the stack is empty
     #
-    def empty? = !@list
+    def empty? = @list.empty?
 
     # Count how many items are in the stack
     #
@@ -74,11 +72,7 @@ module DSA
     #
     # @return [Integer] the list length
     #
-    def length
-      return 0 if empty?
-
-      @list.length
-    end
+    def length = @list.length
 
     # Return a string representation of the stack
     #

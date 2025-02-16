@@ -1,82 +1,83 @@
 RSpec.describe DSA::DoublyLinkedList do
-  let(:list) do
-    head = described_class.new(value: 1)
-    head.next = middle = described_class.new(value: 2, prev: head)
-    middle.next = described_class.new(value: 3, prev: middle)
-    middle.prev = head
-    head
-  end
+  describe DSA::DoublyLinkedList::Node do
+    describe "#value=" do
+      it "updates the value" do
+        node = described_class.new(value: 1)
 
-  describe "#value=" do
-    it "updates the value" do
-      head = list
+        expect(node.value).to eq 1
 
-      expect(head.value).to eq 1
+        node.value = 42
 
-      head.value = 42
-
-      expect(head.value).to eq 42
+        expect(node.value).to eq 42
+      end
     end
-  end
 
-  describe "#prev=" do
-    it "updates the pointer to the previous node" do
-      second = list.next
+    describe "#prev=" do
+      it "updates the pointer to the previous node" do
+        node = described_class.new(value: 1)
 
-      expect(second.value).to eq 2
-      expect(second.prev.value).to eq 1
+        expect(node.value).to eq 1
+        expect(node.prev).to be_nil
 
-      second.prev = nil
+        node.prev = described_class.new(value: 42)
 
-      expect(second.prev).to be_nil
+        expect(node.prev).to_not be_nil
+        expect(node.prev.value).to eq 42
+      end
     end
-  end
 
-  describe "#next=" do
-    it "updates the pointer to the next node" do
-      head = list
+    describe "#next=" do
+      it "updates the pointer to the next node" do
+        node = described_class.new(value: 1)
 
-      expect(head.value).to eq 1
-      expect(head.next).not_to be_nil
+        expect(node.value).to eq 1
+        expect(node.next).to be_nil
 
-      head.next = nil
+        node.next = described_class.new(value: 42)
 
-      expect(head.next).to be_nil
+        expect(node.next).to_not be_nil
+        expect(node.next.value).to eq 42
+      end
     end
   end
 
   describe "#prepend" do
     it "prepends to the beginning of the list" do
-      head = list
+      list = described_class.new
+      list.prepend 3
+      list.prepend 2
+      list.prepend 1
 
+      head = list.root
       expect(head.value).to eq 1
-      expect(head.next.value).to eq 2
-      expect(head.next.next.value).to eq 3
-      expect(head.next.next.next).to be_nil
+      expect(head.prev).to be_nil
 
-      head = head.prepend 42 # rubocop:disable Style/RedundantSelfAssignment
+      middle = head.next
+      expect(middle.value).to eq 2
+      expect(middle.prev.value).to eq 1
 
-      expect(head.value).to eq 42
-      expect(head.next.value).to eq 1
-      expect(head.next.next.value).to eq 2
-      expect(head.next.next.next.value).to eq 3
-      expect(head.next.next.next.next).to be_nil
+      tail = middle.next
+      expect(tail.value).to eq 3
+      expect(tail.prev.value).to eq 2
     end
   end
 
   describe "#each" do
     context "when given a block" do
       it "calls the block for each element" do
-        items = []
+        list = described_class.new
+        list.prepend 2
+        list.prepend 1
 
-        list.each { |item| items << item.value } # rubocop:disable Style/MapIntoArray
+        items = list.each.map(&:value)
 
-        expect(items).to eq [1, 2, 3]
+        expect(items).to eq [1, 2]
       end
     end
 
     context "when not given a block" do
       it "returns an enumerator" do
+        list = described_class.new
         expect(list.each).to be_an_instance_of(Enumerator)
       end
     end
@@ -85,107 +86,121 @@ RSpec.describe DSA::DoublyLinkedList do
   describe "#reverse_each" do
     context "when given a block" do
       it "calls the block for each element" do
-        items = []
+        list = described_class.new
+        tail = list.prepend 2
+        list.prepend 1
 
-        middle = list.next
-        expect(middle.value).to eq 2
-        tail = middle.next
-        expect(tail.value).to eq 3
+        items = list.reverse_each(tail).map(&:value)
 
-        tail.reverse_each { |item| items << item.value }
-
-        expect(items).to eq [3, 2, 1]
+        expect(items).to eq [2, 1]
       end
     end
 
     context "when not given a block" do
       it "returns an enumerator" do
-        expect(list.reverse_each).to be_an_instance_of(Enumerator)
+        list = described_class.new
+        tail = list.prepend 42
+
+        enum = list.reverse_each(tail)
+
+        expect(enum).to be_an_instance_of(Enumerator)
       end
     end
   end
 
   describe "#length" do
     it "returns the number of items in the list" do
-      expect(list.length).to eq 3
+      list = described_class.new
+      list.prepend 1
+      list.prepend 2
+
+      expect(list.length).to eq 2
     end
   end
 
   describe "#[]" do
     context "when index is invalid" do
       it "errors" do
+        list = described_class.new
+
         expect { list[nil] }.to raise_error(ArgumentError, "index must be an integer")
       end
     end
 
     context "when index is negative" do
       it "errors" do
+        list = described_class.new
+
         expect { list[-1] }.to raise_error(ArgumentError, "index must be 0 or greater")
       end
     end
 
     context "when index is too large" do
       it "errors" do
+        list = described_class.new
+
         expect { list[42] }.to raise_error(ArgumentError, "index is too large")
       end
     end
 
     context "when index is 0" do
       it "returns the first element" do
-        head = list
+        list = described_class.new
+        list.prepend 3
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next.value).to eq 3
-        expect(head.next.next.next).to be_nil
+        expect(list.root.value).to eq 1
+        expect(list.root.next.value).to eq 2
+        expect(list.root.next.next.value).to eq 3
+        expect(list.root.next.next.next).to be_nil
 
-        node = head[0]
-        expect(node).to eq(head)
+        expect(list[0].value).to eq(1)
       end
     end
 
     context "when index is the length of the list - 1" do
       it "returns the last element" do
-        head = list
+        list = described_class.new
+        list.prepend 3
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next.value).to eq 3
-        expect(head.next.next.next).to be_nil
+        expect(list.root.value).to eq 1
+        expect(list.root.next.value).to eq 2
+        expect(list.root.next.next.value).to eq 3
+        expect(list.root.next.next.next).to be_nil
 
-        tail = head.next.next
-
-        node = head[2]
-        expect(node).to eq(tail)
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list[2].value).to eq 3
       end
     end
 
     context "when index is in the middle" do
       it "returns the middle element" do
-        head = list
-        head.next = middle = described_class.new(value: 2)
-        middle.next = described_class.new(value: 3)
+        list = described_class.new
+        list.prepend 3
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next.value).to eq 3
-        expect(head.next.next.next).to be_nil
+        expect(list.root.value).to eq 1
+        expect(list.root.next.value).to eq 2
+        expect(list.root.next.next.value).to eq 3
+        expect(list.root.next.next.next).to be_nil
 
-        node = head[1]
-        expect(node).to eq(middle)
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list[2].value).to eq 3
       end
     end
   end
 
   describe "#delete" do
-    let(:list) do
-      head = described_class.new(value: 1)
-      head.next = described_class.new(value: 2, prev: head)
-      head
-    end
-
     context "when node is invalid" do
       it "errors" do
+        list = described_class.new
+
         expect { list.delete(node: nil) }
           .to raise_error(ArgumentError, "node must be a node")
       end
@@ -193,69 +208,81 @@ RSpec.describe DSA::DoublyLinkedList do
 
     context "when the node is at the beginning of the list" do
       it "deletes the node" do
-        head = list
-        tail = described_class.new(value: 2)
-        head.next = tail
+        list = described_class.new
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next).to be_nil
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list.length).to eq 2
 
-        new_head = head.delete node: head
-        expect(new_head).to eq(tail)
+        head = list.root
+        tail = list.root.next
 
-        head = new_head
-        expect(head.value).to eq 2
-        expect(head.next).to be_nil
+        result = list.delete node: head
+        expect(result).to eq head
+
+        expect(list.length).to eq 1
+        expect(list[0].value).to eq 2
+        expect(list.root).to eq tail
       end
     end
 
     context "when the node is at the end of the list" do
       it "deletes the node" do
-        head = list
-        tail = described_class.new(value: 2, prev: head)
-        head.next = tail
+        list = described_class.new
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next).to be_nil
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list.length).to eq 2
 
-        result = head.delete node: tail
-        expect(result).to be_nil
+        head = list.root
+        tail = list.root.next
 
-        expect(head.value).to eq 1
-        expect(head.next).to be_nil
+        result = list.delete node: tail
+        expect(result).to eq tail
+
+        expect(list.length).to eq 1
+        expect(list[0].value).to eq 1
+        expect(list.root).to eq head
       end
     end
 
     context "when the node is in the middle of the list" do
       it "deletes the node" do
-        head = list
-        middle = described_class.new(value: 2, prev: head)
-        head.next = middle
-        tail = described_class.new(value: 3, prev: middle)
-        middle.next = tail
+        list = described_class.new
+        list.prepend 3
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next.value).to eq 3
-        expect(head.next.next.next).to be_nil
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list[2].value).to eq 3
+        expect(list.length).to eq 3
 
-        node = head.delete node: middle
-        expect(node).to eq(tail)
+        head = list.root
+        middle = head.next
+        tail = middle.next
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 3
-        expect(head.next.next).to be_nil
+        result = list.delete node: middle
+        expect(result).to eq middle
+
+        expect(list.length).to eq 2
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 3
+        expect(list.root).to eq head
+        expect(list.root.next).to eq tail
       end
     end
   end
 
   describe "#insert" do
-    let(:list) { described_class.new(value: 1) }
-
     context "when index is invalid" do
       it "errors" do
+        list = described_class.new
+
         expect { list.insert(value: 42, index: nil) }
           .to raise_error(ArgumentError, "index must be an integer")
       end
@@ -263,6 +290,8 @@ RSpec.describe DSA::DoublyLinkedList do
 
     context "when index is negative" do
       it "errors" do
+        list = described_class.new
+
         expect { list.insert(value: 42, index: -1) }
           .to raise_error(ArgumentError, "index must be 0 or greater")
       end
@@ -270,6 +299,8 @@ RSpec.describe DSA::DoublyLinkedList do
 
     context "when index is too large" do
       it "errors" do
+        list = described_class.new
+
         expect { list.insert(value: 42, index: 2) }
           .to raise_error(ArgumentError, "index is too large")
       end
@@ -277,94 +308,114 @@ RSpec.describe DSA::DoublyLinkedList do
 
     context "when index is 0" do
       it "inserts at the beginning of the list" do
-        head = list
+        list = described_class.new
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next).to be_nil
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list.length).to eq 2
 
-        new_node = head.insert value: 42, index: 0
-        expect(new_node).to be_an_instance_of(described_class)
+        result = list.insert value: 42, index: 0
+        expect(result).to be_an_instance_of(described_class::Node)
+        expect(result.value).to eq 42
 
-        head = new_node
-        expect(head.value).to eq 42
-        expect(head.next.value).to eq 1
-        expect(head.next.next).to be_nil
+        expect(list.length).to eq 3
+        expect(list[0].value).to eq 42
+        expect(list[1].value).to eq 1
+        expect(list[2].value).to eq 2
+        expect(list.root).to eq result
       end
     end
 
     context "when index is the length of the list" do
       it "inserts at the end of the list" do
-        head = list
+        list = described_class.new
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next).to be_nil
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list.length).to eq 2
 
-        new_node = head.insert value: 42, index: 1
-        expect(new_node).to be_an_instance_of(described_class)
+        result = list.insert value: 42, index: 2
+        expect(result).to be_an_instance_of(described_class::Node)
+        expect(result.value).to eq 42
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 42
-        expect(head.next.next).to be_nil
+        expect(list.length).to eq 3
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list[2].value).to eq 42
       end
     end
 
     context "when index is in the middle" do
       it "inserts in the middle of the list" do
-        head = list
-        head.next = described_class.new(value: 2)
+        list = described_class.new
+        list.prepend 2
+        list.prepend 1
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 2
-        expect(head.next.next).to be_nil
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 2
+        expect(list.length).to eq 2
 
-        new_node = head.insert value: 42, index: 1
-        expect(new_node).to be_an_instance_of(described_class)
+        result = list.insert value: 42, index: 1
+        expect(result).to be_an_instance_of(described_class::Node)
+        expect(result.value).to eq 42
 
-        expect(head.value).to eq 1
-        expect(head.next.value).to eq 42
-        expect(head.next.next.value).to eq 2
-        expect(head.next.next.next).to be_nil
+        expect(list.length).to eq 3
+        expect(list[0].value).to eq 1
+        expect(list[1].value).to eq 42
+        expect(list[2].value).to eq 2
       end
     end
   end
 
   describe "#append" do
     it "appends to the end of the list" do
-      head = list
+      list = described_class.new
+      list.append 1
+      list.append 2
 
-      expect(head.value).to eq 1
-      expect(head.next.value).to eq 2
-      expect(head.next.next.value).to eq 3
-      expect(head.next.next.next).to be_nil
-
-      head.append 42
-
-      expect(head.value).to eq 1
-      expect(head.next.value).to eq 2
-      expect(head.next.next.value).to eq 3
-      expect(head.next.next.next.value).to eq 42
-      expect(head.next.next.next.next).to be_nil
+      expect(list[0].value).to eq 1
+      expect(list[1].value).to eq 2
+      expect(list.length).to eq 2
     end
   end
 
   describe "#include?" do
     it "returns whether an element exists in the list" do
-      head = list
+      list = described_class.new
+      list.append 1
+      list.append 2
 
-      expect(head.value).to eq 1
-      expect(head.next.value).to eq 2
-      expect(head.next.next.value).to eq 3
-      expect(head.next.next.next).to be_nil
+      expect(list[0].value).to eq 1
+      expect(list[1].value).to eq 2
+      expect(list.length).to eq 2
 
-      expect(head.include?(1)).to be true
-      expect(head.include?(2)).to be true
-      expect(head.include?(3)).to be true
-      expect(head.include?(42)).to be false
+      expect(list.include?(1)).to be true
+      expect(list.include?(2)).to be true
+      expect(list.include?(42)).to be false
+    end
+  end
+
+  describe "#empty?" do
+    it "returns whether the list is empty" do
+      list = described_class.new
+      expect(list.empty?).to be true
+
+      list.append 1
+      expect(list.empty?).to be false
     end
   end
 
   describe "#to_s" do
     it "prints the list" do
+      list = described_class.new
+      list.append 1
+      list.append 2
+      list.append 3
+
       expect(list.to_s).to eq "1 -> 2 -> 3"
     end
   end

@@ -14,6 +14,7 @@ module DSA
     #
     def initialize
       @front = @back = nil
+      @list = DSA::SinglyLinkedList.new
     end
 
     # Push an element to the back of the queue.
@@ -25,10 +26,11 @@ module DSA
     # @return [T] the new value at the back of the queue
     #
     def enqueue value
-      if @back
-        @back = @back.append value # rubocop:disable Style/RedundantSelfAssignment
+      if @list.empty?
+        node = @list.append value
+        @front = @back = node
       else
-        @front = @back = DSA::SinglyLinkedList.new(value:)
+        @back = @list.append value
       end
 
       value
@@ -57,7 +59,8 @@ module DSA
     def dequeue
       result = peek
 
-      @front = @front.next
+      node = @list.delete node: @front
+      @front = node.next
 
       result
     end
@@ -69,7 +72,7 @@ module DSA
     #
     # @return [bool] whether the queue is empty
     #
-    def empty? = !@front
+    def empty? = @list.empty?
 
     # Count how many items are in the queue
     #
@@ -78,17 +81,13 @@ module DSA
     #
     # @return [Integer] the list length
     #
-    def length
-      return 0 if empty?
-
-      @front.length
-    end
+    def length = @list.length
 
     # Return a string representation of the queue
     #
     # @return [String]
     def to_s
-      items = @front.each.map(&:value).join(", ")
+      items = @list.each.map(&:value).join(", ")
       "(front) #{items} (back)"
     end
   end

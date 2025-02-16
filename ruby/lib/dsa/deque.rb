@@ -18,6 +18,7 @@ module DSA
     #
     def initialize
       @front = @back = nil
+      @list = DSA::DoublyLinkedList.new
     end
 
     # Push an element to the front of the deque.
@@ -29,11 +30,11 @@ module DSA
     # @return [T] the new value at the front of the deque
     #
     def push_front value
-      if @front
-        @front.prev = new_front = DSA::DoublyLinkedList.new(value:, next: @front)
-        @front = new_front
+      if @list.empty?
+        node = @list.append value
+        @front = @back = node
       else
-        @front = @back = DSA::DoublyLinkedList.new(value:)
+        @front = @list.prepend value
       end
 
       value
@@ -48,11 +49,11 @@ module DSA
     # @return [T] the new value at the back of the deque
     #
     def push_back value
-      if @back
-        @back.next = new_back = DSA::DoublyLinkedList.new(value:, prev: @back)
-        @back = new_back
+      if @list.empty?
+        node = @list.append value
+        @front = @back = node
       else
-        @front = @back = DSA::DoublyLinkedList.new(value:)
+        @back = @list.append value
       end
 
       value
@@ -94,13 +95,8 @@ module DSA
     def pop_front
       result = peek_front
 
-      @front = @front.next
-
-      if @front.nil? # empty
-        @front = @back = nil
-      else
-        @front.prev = nil
-      end
+      node = @list.delete node: @front
+      @front = node.next
 
       result
     end
@@ -115,13 +111,8 @@ module DSA
     def pop_back
       result = peek_back
 
-      @back = @back.prev
-
-      if @back.nil? # empty
-        @back = @front = nil
-      else
-        @back.next = nil
-      end
+      node = @list.delete node: @back
+      @back = node.prev
 
       result
     end
@@ -133,7 +124,7 @@ module DSA
     #
     # @return [bool] whether the deque is empty
     #
-    def empty? = !@front
+    def empty? = @list.empty?
 
     # Count how many items are in the deque
     #
@@ -142,17 +133,13 @@ module DSA
     #
     # @return [Integer] the list length
     #
-    def length
-      return 0 if empty?
-
-      @front.length
-    end
+    def length = @list.length
 
     # Return a string representation of the deque
     #
     # @return [String]
     def to_s
-      items = @front.each.map(&:value).join(", ")
+      items = @list.each.map(&:value).join(", ")
       "(front) #{items} (back)"
     end
   end
