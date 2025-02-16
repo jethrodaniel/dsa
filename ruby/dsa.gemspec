@@ -15,7 +15,10 @@ Gem::Specification.new do |spec|
     README.md
     LICENSE.txt
     lib/dsa.rb
-    lib/dsa/single_node.rb
+    lib/dsa/deque.rb
+    lib/dsa/doubly_linked_list.rb
+    lib/dsa/queue.rb
+    lib/dsa/singly_linked_list.rb
     lib/dsa/stack.rb
     lib/dsa/version.rb
   ]
