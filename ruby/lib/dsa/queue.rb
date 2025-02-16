@@ -7,25 +7,23 @@ module DSA
     # @return [DSA::Queue] The new queue
     #
     def initialize
-      @list = nil
+      @front = @back = nil
     end
 
-    # Push an element to the end of the queue.
+    # Push an element to the back of the queue.
     #
-    # - Time: O(n), since we have to iterate the list to add to the end.
+    # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T] an element to push into the queue
     # @return [T] the new value at the back of the queue
     #
     def enqueue value
-      # TODO: make this O(1) using a circular linked list
-      if list
-        list.append value
-        return list
+      if @back
+        @back = @back.append value # rubocop:disable Style/RedundantSelfAssignment
+      else
+        @front = @back = DSA::SingleNode.new(value:)
       end
-
-      @list = DSA::SingleNode.new(value:)
 
       value
     end
@@ -40,7 +38,7 @@ module DSA
     def peek
       raise ArgumentError, "queue must not be empty" if empty?
 
-      list.value
+      @front.value
     end
 
     # Pop an element from the front of the queue.
@@ -53,7 +51,7 @@ module DSA
     def dequeue
       result = peek
 
-      self.list = list.next
+      @front = @front.next
 
       result
     end
@@ -65,7 +63,7 @@ module DSA
     #
     # @return [bool] whether the queue is empty
     #
-    def empty? = !@list
+    def empty? = !@front
 
     # Count how many items are in the queue
     #
@@ -77,11 +75,11 @@ module DSA
     def length
       return 0 if empty?
 
-      list.length
+      @front.length
     end
 
     private
 
-    attr_accessor :list
+    attr_accessor :front, :back
   end
 end
