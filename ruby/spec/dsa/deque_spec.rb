@@ -147,4 +147,15 @@ RSpec.describe DSA::Deque do
       expect(deque.length).to eq 0
     end
   end
+
+  describe "#to_s" do
+    it "prints the deque" do
+      deque = described_class.new
+      deque.push_back 2
+      deque.push_back 3
+      deque.push_front 1
+
+      expect(deque.to_s).to eq "(front) 1, 2, 3 (back)"
+    end
+  end
 end

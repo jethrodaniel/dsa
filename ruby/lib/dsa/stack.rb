@@ -79,5 +79,13 @@ module DSA
 
       @list.length
     end
+
+    # Return a string representation of the stack
+    #
+    # @return [String]
+    def to_s
+      items = @list.each.map(&:value).join(" ,").reverse
+      "(bottom) #{items} (top)"
+    end
   end
 end

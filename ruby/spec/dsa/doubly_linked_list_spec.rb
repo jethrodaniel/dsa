@@ -362,4 +362,10 @@ RSpec.describe DSA::DoublyLinkedList do
       expect(head.include?(42)).to be false
     end
   end
+
+  describe "#to_s" do
+    it "prints the list" do
+      expect(list.to_s).to eq "1 -> 2 -> 3"
+    end
+  end
 end

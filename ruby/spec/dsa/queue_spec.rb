@@ -84,4 +84,15 @@ RSpec.describe DSA::Queue do
       expect(queue.length).to eq 0
     end
   end
+
+  describe "#to_s" do
+    it "prints the queue" do
+      queue = described_class.new
+      queue.enqueue 1
+      queue.enqueue 2
+      queue.enqueue 3
+
+      expect(queue.to_s).to eq "(front) 1, 2, 3 (back)"
+    end
+  end
 end

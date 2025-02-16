@@ -84,4 +84,15 @@ RSpec.describe DSA::Stack do
       expect(stack.length).to eq 0
     end
   end
+
+  describe "#to_s" do
+    it "prints the stack" do
+      stack = described_class.new
+      stack.push 1
+      stack.push 2
+      stack.push 3
+
+      expect(stack.to_s).to eq "(bottom) 1, 2, 3 (top)"
+    end
+  end
 end

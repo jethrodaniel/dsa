@@ -147,5 +147,13 @@ module DSA
 
       @front.length
     end
+
+    # Return a string representation of the deque
+    #
+    # @return [String]
+    def to_s
+      items = @front.each.map(&:value).join(", ")
+      "(front) #{items} (back)"
+    end
   end
 end

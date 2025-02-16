@@ -153,5 +153,10 @@ module DSA
       each { |item| return true if item.value == value }
       false
     end
+
+    # Return a string representation of the list
+    #
+    # @return [String]
+    def to_s = each.map(&:value).join(" -> ")
   end
 end
