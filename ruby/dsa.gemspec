@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
     LICENSE.txt
     lib/dsa.rb
     lib/dsa/single_node.rb
+    lib/dsa/stack.rb
     lib/dsa/version.rb
   ]
   spec.require_paths = ["lib"]

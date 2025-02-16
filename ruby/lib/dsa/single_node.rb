@@ -136,8 +136,8 @@ module DSA
 
     # Check if an element exists in the list.
     #
-    # - Time: O(n), since we have to find the first node containing the element
-    # - Space: O(1), no additional space based on input size
+    # Time: O(n), since we have to find the first node containing the element
+    # Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @return [bool] if the element exists in the list
