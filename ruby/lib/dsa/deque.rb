@@ -1,6 +1,16 @@
 module DSA
   # A deque, implemented using a doubly linked list.
   #
+  # @example
+  #   A deque containing 1 (front), then 2, then 3 (back), where
+  #
+  #   - `->` represents `.next`, and
+  #   - `<-` represents `.prev`:
+  #
+  #          (1)      (2)       (3)
+  #   nil -> front -> middle -> back -> nil
+  #   nil <-       <-        <-      <- nil
+  #
   class Deque
     # Create a new deque.
     #

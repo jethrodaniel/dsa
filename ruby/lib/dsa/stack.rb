@@ -1,6 +1,12 @@
 module DSA
   # A stack, implemented using a singly linked list.
   #
+  # @example
+  #   A stack containing 1 (bottom), then 2, then 3 (top):
+  #
+  #   (3)    (2)       (1)
+  #   top -> middle -> bottom -> nil
+  #
   class Stack
     # Create a new stack.
     #
@@ -19,7 +25,7 @@ module DSA
     # @return [DSA::SinglyLinkedList] the new top of the stack
     #
     def push value
-      return (@list = @list.prepend(value)) if @list
+      return (@list = @list.prepend(value)) if @list # rubocop:disable Style/RedundantSelfAssignment
 
       @list = DSA::SinglyLinkedList.new(value:)
     end

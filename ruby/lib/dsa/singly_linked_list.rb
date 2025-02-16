@@ -1,7 +1,14 @@
 module DSA
   # A singly linked list.
   #
-  # head -> body -> tail -> nil
+  # Each element in the list contains a value (`value`) and an optional pointer
+  # to the next element in the list (`next`).
+  #
+  # @example
+  #   A list containing [1, 2, 3], where `->` represents `.next`:
+  #
+  #   (1)    (2)     (3)
+  #   head -> body -> tail -> nil
   #
   class SinglyLinkedList
     attr_accessor :next, :value

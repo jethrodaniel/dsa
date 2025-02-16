@@ -1,6 +1,12 @@
 module DSA
   # A queue, implemented using a singly linked list.
   #
+  # @example
+  #   A queue containing 1 (front), then 2, then 3 (back):
+  #
+  #   (1)      (2)       (3)
+  #   front -> middle -> back -> nil
+  #
   class Queue
     # Create a new queue.
     #

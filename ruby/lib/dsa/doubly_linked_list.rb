@@ -1,6 +1,20 @@
 module DSA
   # A doubly linked list.
   #
+  # Each element in the list contains a value (`value`), an optional pointer to
+  # the next element in the list (`next`), and an optional pointer to the
+  # previous element in the list (`prev`).
+  #
+  # @example
+  #   A list containing [1, 2, 3], where
+  #
+  #   - `->` represents `.next`, and
+  #   - `<-` represents `.prev`:
+  #
+  #           (1)    (2)     (3)
+  #   nil -> head -> body -> tail -> nil
+  #   nil <-      <-      <-      <- nil
+  #
   class DoublyLinkedList
     attr_accessor :prev, :next, :value
 
