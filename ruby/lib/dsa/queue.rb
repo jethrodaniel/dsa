@@ -77,9 +77,5 @@ module DSA
 
       @front.length
     end
-
-    private
-
-    attr_accessor :front, :back
   end
 end

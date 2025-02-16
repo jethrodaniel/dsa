@@ -19,7 +19,7 @@ module DSA
     # @return [DSA::SingleNode] the new top of the stack
     #
     def push value
-      return (@list = list.prepend(value)) if list
+      return (@list = @list.prepend(value)) if @list
 
       @list = DSA::SingleNode.new(value:)
     end
@@ -34,7 +34,7 @@ module DSA
     def peek
       raise ArgumentError, "stack must not be empty" if empty?
 
-      list.value
+      @list.value
     end
 
     # Pop an element from the top of the stack.
@@ -47,7 +47,7 @@ module DSA
     def pop
       result = peek
 
-      self.list = list.next
+      @list = @list.next
 
       result
     end
@@ -71,11 +71,7 @@ module DSA
     def length
       return 0 if empty?
 
-      list.length
+      @list.length
     end
-
-    private
-
-    attr_accessor :list
   end
 end
