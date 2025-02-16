@@ -17,13 +17,13 @@ module DSA
       @next = binding.local_variable_get(:next)
     end
 
-    # Add an element to the beginning of the list.
+    # Add an element to the front of the list.
     #
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::SinglyLinkedList] the new node
+    # @return [DSA::SinglyLinkedList] the new front node
     #
     def prepend(value) = self.class.new(value:, next: self)
 
@@ -81,7 +81,7 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param node [DSA::SinglyLinkedList] the node to delete
-    # @return [DSA::SinglyLinkedList] the deleted node
+    # @return [DSA::SinglyLinkedList] the next node after the deleted node
     #
     def delete node:
       raise ArgumentError, "node must be a node" unless node.is_a?(DSA::SinglyLinkedList)
@@ -91,7 +91,7 @@ module DSA
       each do |item|
         if item.next == node
           item.next = node.next
-          return node
+          return item.next
         end
       end
 
@@ -126,7 +126,7 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::SinglyLinkedList] the new node
+    # @return [DSA::SinglyLinkedList] the new back node
     #
     def append value
       last = self

@@ -191,8 +191,8 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(head.next.value).to eq 2
         expect(head.next.next).to be_nil
 
-        new_head = head.delete node: tail
-        expect(new_head).to eq(tail)
+        result = head.delete node: tail
+        expect(result).to be_nil
 
         expect(head.value).to eq 1
         expect(head.next).to be_nil
@@ -213,7 +213,7 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(head.next.next.next).to be_nil
 
         node = head.delete node: middle
-        expect(node).to eq(middle)
+        expect(node).to eq(tail)
 
         expect(head.value).to eq 1
         expect(head.next.value).to eq 3
