@@ -3,14 +3,14 @@ module DSA
   #
   # head -> body -> tail -> nil
   #
-  class SingleNode
+  class SinglyLinkedList
     attr_accessor :next, :value
 
     # Create a new node of type `T`.
     #
     # @param value [T] An element of type `T` to store in the list
-    # @param next [DSA::SingleNode, nil] The next node in the list
-    # @return [DSA::SingleNode] The new node
+    # @param next [DSA::SinglyLinkedList, nil] The next node in the list
+    # @return [DSA::SinglyLinkedList] The new node
     #
     def initialize value:, next: nil
       @value = value
@@ -23,7 +23,7 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::SingleNode] the new node
+    # @return [DSA::SinglyLinkedList] the new node
     #
     def prepend(value) = self.class.new(value:, next: self)
 
@@ -32,8 +32,8 @@ module DSA
     # - Time: O(n), since we iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @yield [DSA::SingleNode] each element of the list, if a block is given
-    # @return [Enumerator<DSA::SingleNode>] if no block is given
+    # @yield [DSA::SinglyLinkedList] each element of the list, if a block is given
+    # @return [Enumerator<DSA::SinglyLinkedList>] if no block is given
     #
     def each
       return to_enum(__method__) unless block_given?
@@ -62,7 +62,7 @@ module DSA
     # - Time: O(n), since we have to iterate the list to find the node at that index
     # - Space: O(1), no additional space based on input size
     #
-    # @return [DSA::SingleNode] the node at that index
+    # @return [DSA::SinglyLinkedList] the node at that index
     #
     def [] index
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
@@ -80,11 +80,11 @@ module DSA
     # - Time: O(n), since we have to iterate the list to find the node.
     # - Space: O(1), no additional space based on input size
     #
-    # @param node [DSA::SingleNode] the node to delete
-    # @return [DSA::SingleNode] the deleted node
+    # @param node [DSA::SinglyLinkedList] the node to delete
+    # @return [DSA::SinglyLinkedList] the deleted node
     #
     def delete node:
-      raise ArgumentError, "node must be a node" unless node.is_a?(DSA::SingleNode)
+      raise ArgumentError, "node must be a node" unless node.is_a?(DSA::SinglyLinkedList)
 
       return node.next if self == node
 
@@ -105,7 +105,7 @@ module DSA
     #
     # @param value [T]
     # @param index [Integer]
-    # @return [DSA::SingleNode] the new node
+    # @return [DSA::SinglyLinkedList] the new node
     #
     def insert value:, index:
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
@@ -126,7 +126,7 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::SingleNode] the new node
+    # @return [DSA::SinglyLinkedList] the new node
     #
     def append value
       last = self

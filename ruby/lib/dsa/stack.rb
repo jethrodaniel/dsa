@@ -16,12 +16,12 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T] an element to push onto the stack
-    # @return [DSA::SingleNode] the new top of the stack
+    # @return [DSA::SinglyLinkedList] the new top of the stack
     #
     def push value
       return (@list = @list.prepend(value)) if @list
 
-      @list = DSA::SingleNode.new(value:)
+      @list = DSA::SinglyLinkedList.new(value:)
     end
 
     # Return the top of the stack.
@@ -29,7 +29,7 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [DSA::SingleNode] the top of the stack
+    # @return [DSA::SinglyLinkedList] the top of the stack
     #
     def peek
       raise ArgumentError, "stack must not be empty" if empty?
@@ -42,7 +42,7 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [DSA::SingleNode] the new top of the stack
+    # @return [DSA::SinglyLinkedList] the new top of the stack
     #
     def pop
       result = peek

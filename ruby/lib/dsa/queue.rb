@@ -22,7 +22,7 @@ module DSA
       if @back
         @back = @back.append value # rubocop:disable Style/RedundantSelfAssignment
       else
-        @front = @back = DSA::SingleNode.new(value:)
+        @front = @back = DSA::SinglyLinkedList.new(value:)
       end
 
       value
