@@ -145,6 +145,31 @@ RSpec.describe DSA::BinaryTree do
     end
   end
 
+  describe "#each_levelorder" do
+    context "when given a block" do
+      it "calls the block for each node" do
+        tree = described_class.new
+        tree.add 1
+        tree.add 3
+        tree.add 2
+        tree.add 4
+        items = tree.each_levelorder.map(&:value)
+        expect(items).to eq [1, 3, 2, 4]
+
+        empty_tree = described_class.new
+        items = empty_tree.each_levelorder.map(&:value)
+        expect(items).to eq []
+      end
+    end
+
+    context "when not given a block" do
+      it "returns an enumerator" do
+        tree = described_class.new
+        expect(tree.each_levelorder).to be_an_instance_of(Enumerator)
+      end
+    end
+  end
+
   describe "#add" do
     context "when adding to an empty tree" do
       it "adds the value to the tree" do

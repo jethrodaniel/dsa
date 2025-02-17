@@ -98,6 +98,32 @@ module DSA
       _each_postorder node: @root, &block
     end
 
+    # Visit each node via an level-order breadth-first-search.
+    #
+    # - Time: O(n), since we might have to iterate every node if unbalanced
+    # - Space: O(n), since we iterate each node using a queue
+    #
+    # @yield [DSA::BinaryTree::Node] each element, if a block is given
+    # @return [Enumerator<DSA::BinaryTree::Node>] if no block is given
+    #
+    def each_levelorder
+      return to_enum(__method__) unless block_given?
+
+      return if empty?
+
+      queue = DSA::Queue.new
+      queue.enqueue @root
+
+      until queue.empty?
+        node = queue.dequeue
+
+        queue.enqueue node.left if node.left
+        queue.enqueue node.right if node.right
+
+        yield node
+      end
+    end
+
     # Check if an element exists in the tree.
     #
     # - Time: O(n), since we might have to iterate every node if unbalanced
