@@ -1,8 +1,8 @@
 module DSA
   # A binary tree.
   #
-  # Each element in the list contains a value (`value`), an optional pointers to
-  # its left and right children.
+  # Each element in the list contains a value (`value`) and optional pointers
+  # to its left and right children.
   #
   class BinaryTree
     # @return [DSA::BinaryTree::Node, nil] the root node of the tree
