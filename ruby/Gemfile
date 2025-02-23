@@ -2,6 +2,8 @@ source "https://rubygems.org"
 
 gemspec
 
+ruby file: ".tool-versions"
+
 group :development, :test do
   gem "rake", require: false
 
