@@ -1,5 +1,5 @@
 RSpec.describe DSA::SinglyLinkedList do
-  describe DSA::SinglyLinkedList::Node do
+  describe described_class::Node do
     describe "#value=" do
       it "updates the value" do
         node = described_class.new(value: 1)

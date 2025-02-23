@@ -1,5 +1,5 @@
 RSpec.describe DSA::DoublyLinkedList do
-  describe DSA::DoublyLinkedList::Node do
+  describe described_class::Node do
     describe "#value=" do
       it "updates the value" do
         node = described_class.new(value: 1)
