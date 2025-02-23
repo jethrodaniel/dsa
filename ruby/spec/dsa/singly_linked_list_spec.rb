@@ -3,11 +3,9 @@ RSpec.describe DSA::SinglyLinkedList do
     describe "#value=" do
       it "updates the value" do
         node = described_class.new(value: 1)
-
         expect(node.value).to eq 1
 
         node.value = 42
-
         expect(node.value).to eq 42
       end
     end
@@ -18,15 +16,41 @@ RSpec.describe DSA::SinglyLinkedList do
           value: 1,
           next: described_class.new(value: 2)
         )
-
-        expect(node.value).to eq 1
         expect(node.next).not_to be_nil
 
         node.next = nil
-
         expect(node.next).to be_nil
       end
     end
+  end
+
+  it "takes up 80 bytes per item" do
+    lists = 1.upto(100).map do |n|
+      list = described_class.new
+      1.upto(n).each { list.prepend _1 }
+      list
+    end
+
+    sizeof = ->(obj) do
+      size = ObjectSpace.memsize_of obj
+
+      obj.instance_variables.each do |ivar_name|
+        ivar = obj.instance_variable_get(ivar_name)
+        size += ObjectSpace.memsize_of(ivar)
+        size += sizeof.call(ivar)
+      end
+
+      size
+    end
+
+    expect(lists[0].length).to eq 1
+    expect(sizeof.call(lists[0])).to eq 40 + 80 * 1
+
+    expect(lists[1].length).to eq 2
+    expect(sizeof.call(lists[1])).to eq 40 + 80 * 2
+
+    expect(lists[99].length).to eq 100
+    expect(sizeof.call(lists[99])).to eq 40 + 80 * 100
   end
 
   describe "#prepend" do
@@ -40,20 +64,50 @@ RSpec.describe DSA::SinglyLinkedList do
       expect(list[0].value).to eq 1
       expect(list[1].value).to eq 2
     end
+
+    it "has O(1) time complexity" do
+      list = described_class.new
+      expect { list.prepend 42 }.to perform_constant.sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      expect { list.prepend 42 }.to perform_allocation(3).and_retain(3)
+    end
   end
 
   describe "#each" do
     context "when given a block" do
       it "calls the block for each element" do
         list = described_class.new
-        list.prepend 2
-        list.prepend 1
+        1.upto(3).each { |n| list.prepend n }
         items = list.each.map(&:value)
-        expect(items).to eq [1, 2]
+        expect(items).to eq [3, 2, 1]
 
         empty_list = described_class.new
         items = empty_list.each.map(&:value)
         expect(items).to eq []
+      end
+
+      it "has O(n) time complexity" do
+        lists = bench_range(1, 1_000).map do |n|
+          list = described_class.new
+          1.upto(n).each { list.prepend _1 }
+          list
+        end
+
+        expect { |n, i|
+          lists[i].each {}
+        }.to perform_linear.in_range(1, 1_000).sample(10).times
+      end
+
+      it "has O(1) space complexity" do
+        list = described_class.new
+        1.upto(1_000).each { list.prepend _1 }
+
+        expect {
+          list.each {}
+        }.to perform_allocation(1).and_retain(1)
       end
     end
 
@@ -72,6 +126,27 @@ RSpec.describe DSA::SinglyLinkedList do
       list.prepend 2
 
       expect(list.length).to eq 2
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        lists[i].length
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.length
+      }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -143,6 +218,28 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(list[1].value).to eq 2
         expect(list.length).to eq 3
       end
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list[n - 1] # worst case, accessing the last element
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list[42]
+      }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -232,6 +329,30 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(list[0]).to eq head
         expect(list[1]).to eq tail
       end
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(2, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        node = list[n - 1] # worst case, deleting the last element
+
+        list.delete(node:)
+      }.to perform_linear.in_range(2, 1_000).sample(1).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list[42]
+      }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -325,6 +446,28 @@ RSpec.describe DSA::SinglyLinkedList do
         expect(list[2].value).to eq 2
       end
     end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.insert value: 42, index: n - 1 # worst cast, insert at end
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.insert value: 42, index: 42
+      }.to perform_allocation(4).and_retain(4)
+    end
   end
 
   describe "#append" do
@@ -336,6 +479,28 @@ RSpec.describe DSA::SinglyLinkedList do
       expect(list[0].value).to eq 1
       expect(list[1].value).to eq 2
       expect(list.length).to eq 2
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.append 42
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.append 42
+      }.to perform_allocation(3).and_retain(3)
     end
   end
 
@@ -353,6 +518,28 @@ RSpec.describe DSA::SinglyLinkedList do
       expect(list.include?(2)).to be true
       expect(list.include?(42)).to be false
     end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 10_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.include? 500
+      }.to perform_linear.in_range(1, 10_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.include? 42
+      }.to perform_allocation(1).and_retain(1)
+    end
   end
 
   describe "#empty?" do
@@ -362,6 +549,26 @@ RSpec.describe DSA::SinglyLinkedList do
 
       list.append 1
       expect(list.empty?).to be false
+    end
+
+    it "has O(1) time complexity" do
+      lists = bench_range(1, 10_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.empty?
+      }.to perform_constant.in_range(1, 10_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect { list.empty? }.to perform_allocation(1).and_retain(1)
     end
   end
 

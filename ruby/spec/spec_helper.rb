@@ -9,6 +9,11 @@ SimpleCov.start do
   add_filter %r{^/spec/}
 end
 
-require "dsa"
+require "rspec-benchmark"
 
-RSpec.configure(&:disable_monkey_patching!)
+RSpec.configure do |config|
+  config.disable_monkey_patching!
+  config.include RSpec::Benchmark::Matchers
+end
+
+require "dsa"
