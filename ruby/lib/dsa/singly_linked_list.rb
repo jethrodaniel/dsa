@@ -1,27 +1,22 @@
 module DSA
   # A singly linked list.
   #
-  # Each element in the list contains a value (`value`) and an optional pointer
-  # to the next element in the list (`next`).
-  #
-  # @example
-  #   A list containing [1, 2, 3], where `->` represents `.next`:
-  #
-  #   (1)    (2)     (3)
-  #   head -> body -> tail -> nil
+  # Each item in the list contains a value and an optional pointer to the next
+  # item in the list.
   #
   class SinglyLinkedList
-    # @return [DSA::SinglyLinkedList::Node, nil] the root node of the list
+    # @return [Node, nil] the root node of the list
     attr_accessor :root
 
     class Node
-      attr_accessor :next, :value
+      # @return [T]
+      attr_accessor :value
 
-      # Create a new node of type `T`.
-      #
-      # @param value [T] An element of type `T` to store in the list
-      # @param next [DSA::SinglyLinkedList::Node, nil] The next node in the list
-      # @return [DSA::SinglyLinkedList::Node] The new node
+      # @return [Node, nil]
+      attr_accessor :next
+
+      # @param value [T]
+      # @param next [Node, nil]
       #
       def initialize value:, next: nil
         @value = value
@@ -29,25 +24,25 @@ module DSA
       end
     end
 
-    # Add an element to the front of the list.
+    # Add an item to the front of the list.
     #
     # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::SinglyLinkedList::Node] the new front node
+    # @return [Data] the new front node
     #
     def prepend value
       @root = Node.new(value:, next: @root)
     end
 
-    # Yield each element of the list.
+    # Yield each item of the list.
     #
     # - Time: O(n), since we iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @yield [DSA::SinglyLinkedList::Node] each element of the list, if a block is given
-    # @return [Enumerator<DSA::SinglyLinkedList::Node>] if no block is given
+    # @yield [Node] each item of the list, if a block is given
+    # @return [Enumerator<Node>] if no block is given
     #
     def each
       return to_enum(__method__) unless block_given?
@@ -78,7 +73,7 @@ module DSA
     # - Time: O(n), since we have to iterate the list to find the node at that index
     # - Space: O(1), no additional space based on input size
     #
-    # @return [DSA::SinglyLinkedList] the node at that index
+    # @return [Node]
     #
     def [] index
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
@@ -91,16 +86,16 @@ module DSA
       raise ArgumentError, "index is too large"
     end
 
-    # Delete an element
+    # Delete an item
     #
     # - Time: O(n), since we have to iterate the list to find the previous node
     # - Space: O(1), no additional space based on input size
     #
-    # @param node [DSA::SinglyLinkedList] the node to delete
-    # @return [DSA::SinglyLinkedList] the deleted node
+    # @param node [Node] the node to delete
+    # @return [Node] the deleted node
     #
     def delete node:
-      raise ArgumentError, "node must be a node" unless node.is_a?(DSA::SinglyLinkedList::Node)
+      raise ArgumentError, "node must be a node" unless node.is_a?(Node)
 
       if @root == node
         @root = node.next
@@ -117,14 +112,14 @@ module DSA
       raise ArgumentError, "node isn't in the list"
     end
 
-    # Insert an element at the given index.
+    # Insert an item at the given index.
     #
     # - Time: O(n), we have to iterate the list to find the previous index's node
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
     # @param index [Integer]
-    # @return [DSA::SinglyLinkedList] the new node
+    # @return [Node] the new node
     #
     def insert value:, index:
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
@@ -139,13 +134,13 @@ module DSA
       raise ArgumentError, "index is too large"
     end
 
-    # Append an element to the end of the list.
+    # Append an item to the end of the list.
     #
     # - Time: O(n), since we have to find the last node
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [DSA::SinglyLinkedList] the new back node
+    # @return [Node] the new last node
     #
     def append value
       return @root = Node.new(value:) if empty?
@@ -155,13 +150,13 @@ module DSA
       last.next = Node.new(value:)
     end
 
-    # Check if an element exists in the list.
+    # Check if an item exists in the list.
     #
-    # Time: O(n), since we have to find the first node containing the element
+    # Time: O(n), since we have to find the first node containing the item
     # Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [bool] if the element exists in the list
+    # @return [Boolean] if the item exists in the list
     #
     def include? value
       each { |item| return true if item.value == value }
@@ -173,7 +168,7 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @return [bool] whether the list is empty
+    # @return [Boolean] whether the list is empty
     #
     def empty? = @root.nil?
 
