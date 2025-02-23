@@ -97,8 +97,7 @@ module DSA
     # - Time: O(n), since we iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @note `node` must be a member of the list
-    # @param [DSA::DoublyLinkedList::Node] a member of the list
+    # @param node [DSA::DoublyLinkedList::Node] a member of the list
     # @yield [DSA::DoublyLinkedList::Node] each prior element, if a block is given
     # @return [Enumerator<DSA::DoublyLinkedList::Node>] if no block is given
     #
