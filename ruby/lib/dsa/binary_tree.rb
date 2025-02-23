@@ -162,14 +162,14 @@ module DSA
       return if node.nil?
 
       _each_in_order node: node.left, &block
-      block.call node
+      yield node
       _each_in_order node: node.right, &block
     end
 
     def _each_preorder node:, &block
       return if node.nil?
 
-      block.call node
+      yield node
       _each_preorder node: node.left, &block
       _each_preorder node: node.right, &block
     end
@@ -179,7 +179,7 @@ module DSA
 
       _each_postorder node: node.left, &block
       _each_postorder node: node.right, &block
-      block.call node
+      yield node
     end
   end
 end
