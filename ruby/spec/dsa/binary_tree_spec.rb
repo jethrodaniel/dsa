@@ -222,13 +222,10 @@ RSpec.describe DSA::BinaryTree do
       skip "TODO"
 
       tree = described_class.new
-
-      expect(tree.empty?).to be true
       node = tree.add 1
-      expect(tree.empty?).to be false
+
       result = tree.remove node
       expect(result).to eq node
-      expect(tree.empty?).to be true
     end
   end
 

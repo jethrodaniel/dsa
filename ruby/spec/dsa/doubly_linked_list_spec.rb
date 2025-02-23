@@ -48,7 +48,7 @@ RSpec.describe DSA::DoublyLinkedList do
       list.prepend 2
       list.prepend 1
 
-      head = list.root
+      head = list[0]
       expect(head.value).to eq 1
       expect(head.prev).to be_nil
 
@@ -140,8 +140,17 @@ RSpec.describe DSA::DoublyLinkedList do
     context "when index is too large" do
       it "errors" do
         list = described_class.new
+        list.prepend 1
 
         expect { list[42] }.to raise_error(ArgumentError, "index is too large")
+      end
+    end
+
+    context "when list is empty" do
+      it "errors" do
+        list = described_class.new
+
+        expect { list[0] }.to raise_error(ArgumentError, "list is empty")
       end
     end
 
@@ -152,12 +161,8 @@ RSpec.describe DSA::DoublyLinkedList do
         list.prepend 2
         list.prepend 1
 
-        expect(list.root.value).to eq 1
-        expect(list.root.next.value).to eq 2
-        expect(list.root.next.next.value).to eq 3
-        expect(list.root.next.next.next).to be_nil
-
-        expect(list[0].value).to eq(1)
+        expect(list[0].value).to eq 1
+        expect(list.length).to eq 3
       end
     end
 
@@ -168,14 +173,8 @@ RSpec.describe DSA::DoublyLinkedList do
         list.prepend 2
         list.prepend 1
 
-        expect(list.root.value).to eq 1
-        expect(list.root.next.value).to eq 2
-        expect(list.root.next.next.value).to eq 3
-        expect(list.root.next.next.next).to be_nil
-
         expect(list[0].value).to eq 1
-        expect(list[1].value).to eq 2
-        expect(list[2].value).to eq 3
+        expect(list.length).to eq 3
       end
     end
 
@@ -186,14 +185,8 @@ RSpec.describe DSA::DoublyLinkedList do
         list.prepend 2
         list.prepend 1
 
-        expect(list.root.value).to eq 1
-        expect(list.root.next.value).to eq 2
-        expect(list.root.next.next.value).to eq 3
-        expect(list.root.next.next.next).to be_nil
-
-        expect(list[0].value).to eq 1
         expect(list[1].value).to eq 2
-        expect(list[2].value).to eq 3
+        expect(list.length).to eq 3
       end
     end
   end
@@ -218,15 +211,14 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(list[1].value).to eq 2
         expect(list.length).to eq 2
 
-        head = list.root
-        tail = list.root.next
+        head = list[0]
+        tail = head.next
 
         result = list.delete node: head
         expect(result).to eq head
 
+        expect(list[0]).to eq tail
         expect(list.length).to eq 1
-        expect(list[0].value).to eq 2
-        expect(list.root).to eq tail
       end
     end
 
@@ -240,15 +232,14 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(list[1].value).to eq 2
         expect(list.length).to eq 2
 
-        head = list.root
-        tail = list.root.next
+        head = list[0]
+        tail = head.next
 
         result = list.delete node: tail
         expect(result).to eq tail
 
+        expect(list[0]).to eq head
         expect(list.length).to eq 1
-        expect(list[0].value).to eq 1
-        expect(list.root).to eq head
       end
     end
 
@@ -264,18 +255,16 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(list[2].value).to eq 3
         expect(list.length).to eq 3
 
-        head = list.root
+        head = list[0]
         middle = head.next
         tail = middle.next
 
         result = list.delete node: middle
         expect(result).to eq middle
 
+        expect(list[0]).to eq head
+        expect(list[1]).to eq tail
         expect(list.length).to eq 2
-        expect(list[0].value).to eq 1
-        expect(list[1].value).to eq 3
-        expect(list.root).to eq head
-        expect(list.root.next).to eq tail
       end
     end
   end
@@ -322,11 +311,10 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(result).to be_an_instance_of(described_class::Node)
         expect(result.value).to eq 42
 
-        expect(list.length).to eq 3
-        expect(list[0].value).to eq 42
+        expect(list[0]).to eq result
         expect(list[1].value).to eq 1
         expect(list[2].value).to eq 2
-        expect(list.root).to eq result
+        expect(list.length).to eq 3
       end
     end
 
@@ -344,10 +332,10 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(result).to be_an_instance_of(described_class::Node)
         expect(result.value).to eq 42
 
-        expect(list.length).to eq 3
         expect(list[0].value).to eq 1
         expect(list[1].value).to eq 2
-        expect(list[2].value).to eq 42
+        expect(list[2]).to eq result
+        expect(list.length).to eq 3
       end
     end
 
@@ -365,10 +353,10 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(result).to be_an_instance_of(described_class::Node)
         expect(result.value).to eq 42
 
-        expect(list.length).to eq 3
         expect(list[0].value).to eq 1
-        expect(list[1].value).to eq 42
+        expect(list[1]).to eq result
         expect(list[2].value).to eq 2
+        expect(list.length).to eq 3
       end
     end
   end

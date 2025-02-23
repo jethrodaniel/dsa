@@ -5,9 +5,6 @@ module DSA
   # item in the list.
   #
   class SinglyLinkedList
-    # @return [Node, nil] the root node of the list
-    attr_accessor :root
-
     class Node
       # @return [T]
       attr_accessor :value
@@ -78,6 +75,7 @@ module DSA
     def [] index
       raise ArgumentError, "index must be an integer" unless index.respond_to?(:to_i) && index.to_i == index
       raise ArgumentError, "index must be 0 or greater" unless index >= 0
+      raise ArgumentError, "list is empty" if empty?
 
       each.with_index do |item, i|
         return item if i == index

@@ -30,7 +30,7 @@ module DSA
     def peek
       raise ArgumentError, "stack must not be empty" if empty?
 
-      @list.root.value
+      @list[0].value
     end
 
     # Pop an item from the top of the stack.
@@ -43,7 +43,7 @@ module DSA
     def pop
       result = peek
 
-      @list.delete node: @list.root
+      @list.delete node: @list[0]
 
       result
     end
