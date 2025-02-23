@@ -3,11 +3,9 @@ RSpec.describe DSA::DoublyLinkedList do
     describe "#value=" do
       it "updates the value" do
         node = described_class.new(value: 1)
-
         expect(node.value).to eq 1
 
         node.value = 42
-
         expect(node.value).to eq 42
       end
     end
@@ -15,7 +13,6 @@ RSpec.describe DSA::DoublyLinkedList do
     describe "#prev=" do
       it "updates the pointer to the previous node" do
         node = described_class.new(value: 1)
-
         expect(node.value).to eq 1
         expect(node.prev).to be_nil
 
@@ -29,7 +26,6 @@ RSpec.describe DSA::DoublyLinkedList do
     describe "#next=" do
       it "updates the pointer to the next node" do
         node = described_class.new(value: 1)
-
         expect(node.value).to eq 1
         expect(node.next).to be_nil
 
