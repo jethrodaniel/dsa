@@ -1,4 +1,12 @@
 RSpec.describe DSA::SinglyLinkedList do
+  def generate_lists from, to
+    bench_range(from, to).map do |n|
+      list = described_class.new
+      1.upto(n).each { list.prepend _1 }
+      list
+    end
+  end
+
   describe described_class::Node do
     describe "#value=" do
       it "updates the value" do
@@ -93,11 +101,7 @@ RSpec.describe DSA::SinglyLinkedList do
       end
 
       it "has O(n) time complexity" do
-        lists = bench_range(1, 1_000).map do |n|
-          list = described_class.new
-          1.upto(n).each { list.prepend _1 }
-          list
-        end
+        lists = generate_lists 1, 1_000
 
         expect { |n, i|
           lists[i].each {}
@@ -132,11 +136,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(n) time complexity" do
-      lists = bench_range(1, 1_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 1, 1_000
 
       expect { |n, i|
         lists[i].length
@@ -224,11 +224,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(n) time complexity" do
-      lists = bench_range(1, 1_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 1, 1_000
 
       expect { |n, i|
         list = lists[i]
@@ -335,11 +331,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(n) time complexity" do
-      lists = bench_range(2, 1_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 2, 1_000
 
       expect { |n, i|
         list = lists[i]
@@ -451,11 +443,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(n) time complexity" do
-      lists = bench_range(1, 1_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 1, 1_000
 
       expect { |n, i|
         list = lists[i]
@@ -485,11 +473,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(n) time complexity" do
-      lists = bench_range(1, 1_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 1, 1_000
 
       expect { |n, i|
         list = lists[i]
@@ -523,11 +507,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(n) time complexity" do
-      lists = bench_range(1, 10_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 1, 10_000
 
       expect { |n, i|
         list = lists[i]
@@ -555,11 +535,7 @@ RSpec.describe DSA::SinglyLinkedList do
     end
 
     it "has O(1) time complexity" do
-      lists = bench_range(1, 10_000).map do |n|
-        list = described_class.new
-        1.upto(n).each { list.prepend _1 }
-        list
-      end
+      lists = generate_lists 1, 10_000
 
       expect { |n, i|
         list = lists[i]
