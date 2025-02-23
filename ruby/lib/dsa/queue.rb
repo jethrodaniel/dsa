@@ -1,39 +1,31 @@
 module DSA
   # A queue, implemented using a singly linked list.
   #
-  # @example
-  #   A queue containing 1 (front), then 2, then 3 (back):
-  #
-  #   (1)      (2)       (3)
-  #   front -> middle -> back -> nil
-  #
   class Queue
-    # Create a new queue.
-    #
-    # @return [DSA::Queue] The new queue
+    # @return [DSA::Queue]
     #
     def initialize
       @front = @back = nil
       @list = DSA::SinglyLinkedList.new
     end
 
-    # Push an element to the back of the queue.
+    # Push an item to the back of the queue.
     #
-    # - Time: O(1), since we don't have to iterate the list.
+    # - Time: O(1), since we don't have to iterate the list
     # - Space: O(1), no additional space based on input size
     #
-    # @param value [T] an element to push into the queue
-    # @return [T] the new value at the back of the queue
+    # @param item [T] an item to push into the queue
+    # @return [T] the new item at the back of the queue
     #
-    def enqueue value
+    def enqueue item
       if @list.empty?
-        node = @list.append value
+        node = @list.append item
         @front = @back = node
       else
-        @back = @list.append value
+        @back = @list.append item
       end
 
-      value
+      item
     end
 
     # Return the front of the queue.
@@ -41,7 +33,7 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [T] the value at the front of the queue
+    # @return [T] the item at the front of the queue
     #
     def peek
       raise ArgumentError, "queue must not be empty" if empty?
@@ -49,12 +41,12 @@ module DSA
       @front.value
     end
 
-    # Pop an element from the front of the queue.
+    # Pop an item from the front of the queue.
     #
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [T] the new value at the front of the queue
+    # @return [T] the new item at the front of the queue
     #
     def dequeue
       result = peek
@@ -70,7 +62,7 @@ module DSA
     # - Time: O(1), since we don't have to iterate the list.
     # - Space: O(1), no additional space based on input size
     #
-    # @return [bool] whether the queue is empty
+    # @return [Boolean] whether the queue is empty
     #
     def empty? = @list.empty?
 
@@ -86,6 +78,7 @@ module DSA
     # Return a string representation of the queue
     #
     # @return [String]
+    #
     def to_s
       items = @list.each.map(&:value).join(", ")
       "(front) #{items} (back)"

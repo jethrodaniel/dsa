@@ -30,7 +30,7 @@ module DSA
     # - Space: O(1), no additional space based on input size
     #
     # @param value [T]
-    # @return [Data] the new front node
+    # @return [Node] the new front node
     #
     def prepend value
       @root = Node.new(value:, next: @root)
@@ -175,6 +175,7 @@ module DSA
     # Return a string representation of the list
     #
     # @return [String]
+    #
     def to_s = each.map(&:value).join(" -> ")
   end
 end

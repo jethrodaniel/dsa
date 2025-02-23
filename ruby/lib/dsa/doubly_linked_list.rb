@@ -203,6 +203,7 @@ module DSA
     # Return a string representation of the list
     #
     # @return [String]
+    #
     def to_s = each.map(&:value).join(" -> ")
   end
 end

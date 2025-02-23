@@ -2,8 +2,9 @@ RSpec.describe DSA::Stack do
   describe "#push" do
     it "pushes an element to the top of the stack" do
       stack = described_class.new
-      stack.push 1
-      stack.push 2
+
+      expect(stack.push(1)).to eq(1)
+      expect(stack.push(2)).to eq(2)
 
       expect(stack.pop).to eq 2
       expect(stack.pop).to eq 1
@@ -22,7 +23,9 @@ RSpec.describe DSA::Stack do
       it "pops an element from the top of the stack" do
         stack = described_class.new
         stack.push 1
+        stack.push 2
 
+        expect(stack.pop).to eq 2
         expect(stack.pop).to eq 1
       end
     end

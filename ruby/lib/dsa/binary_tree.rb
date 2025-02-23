@@ -1,22 +1,26 @@
 module DSA
   # A binary tree.
   #
-  # Each element in the list contains a value (`value`) and optional pointers
-  # to its left and right children.
+  # Each item in the list contains a value optional pointers to its left and
+  # right children.
   #
   class BinaryTree
-    # @return [DSA::BinaryTree::Node, nil] the root node of the tree
+    # @return [Node, nil] the root node of the tree
     attr_accessor :root
 
     class Node
-      attr_accessor :value, :left, :right
+      # @return [T]
+      attr_accessor :value
 
-      # Create a new node of type `T`.
-      #
-      # @param value [T] An element of type `T` to store in the tree
-      # @param left [DSA::BinaryTree::Node, nil] The node's left child
-      # @param right [DSA::BinaryTree::Node, nil] The node's right child
-      # @return [DSA::BinaryTree::Node] The new node
+      # @return [Node, nil]
+      attr_accessor :left
+
+      # @return [Node, nil]
+      attr_accessor :right
+
+      # @param value [T]
+      # @param left [Node, nil]
+      # @param right [Node, nil]
       #
       def initialize value:, left: nil, right: nil
         @value = value
@@ -24,7 +28,7 @@ module DSA
         @right = right
       end
 
-      # @return [bool] whether the node is a leaf node
+      # @return [Boolean] whether the node is a leaf node
       def leaf? = left.nil? && right.nil?
     end
 
@@ -33,17 +37,17 @@ module DSA
     # - Time: O(1), since we don't have to iterate the nodes
     # - Space: O(1), no additional space based on input size
     #
-    # @return [bool] whether the tree is empty
+    # @return [Boolean] whether the tree is empty
     #
     def empty? = @root.nil?
 
-    # Add an element to the tree.
+    # Add an item to the tree.
     #
     # - Time: O(n), since we might have to iterate every node if unbalanced
     # - Space: O(n), since we recursively iterate each node
     #
     # @param value [T]
-    # @return [DSA::BinaryTree::Node] the new node
+    # @return [Node] the new node
     #
     def add value
       return @root = Node.new(value:) if empty?
@@ -61,8 +65,8 @@ module DSA
     # - Time: O(n), since we might have to iterate every node if unbalanced
     # - Space: O(n), since we recursively iterate each node
     #
-    # @yield [DSA::BinaryTree::Node] each element, if a block is given
-    # @return [Enumerator<DSA::BinaryTree::Node>] if no block is given
+    # @yield [Node] each item, if a block is given
+    # @return [Enumerator<Node>] if no block is given
     #
     def each_in_order &block
       return to_enum(__method__) if block.nil?
@@ -75,8 +79,8 @@ module DSA
     # - Time: O(n), since we might have to iterate every node if unbalanced
     # - Space: O(n), since we recursively iterate each node
     #
-    # @yield [DSA::BinaryTree::Node] each element, if a block is given
-    # @return [Enumerator<DSA::BinaryTree::Node>] if no block is given
+    # @yield [Node] each item, if a block is given
+    # @return [Enumerator<Node>] if no block is given
     #
     def each_preorder &block
       return to_enum(__method__) if block.nil?
@@ -89,8 +93,8 @@ module DSA
     # - Time: O(n), since we might have to iterate every node if unbalanced
     # - Space: O(n), since we recursively iterate each node
     #
-    # @yield [DSA::BinaryTree::Node] each element, if a block is given
-    # @return [Enumerator<DSA::BinaryTree::Node>] if no block is given
+    # @yield [Node] each item, if a block is given
+    # @return [Enumerator<Node>] if no block is given
     #
     def each_postorder &block
       return to_enum(__method__) if block.nil?
@@ -103,8 +107,8 @@ module DSA
     # - Time: O(n), since we might have to iterate every node if unbalanced
     # - Space: O(n), since we iterate each node using a queue
     #
-    # @yield [DSA::BinaryTree::Node] each element, if a block is given
-    # @return [Enumerator<DSA::BinaryTree::Node>] if no block is given
+    # @yield [Node] each item, if a block is given
+    # @return [Enumerator<Node>] if no block is given
     #
     def each_levelorder
       return to_enum(__method__) unless block_given?
@@ -124,13 +128,13 @@ module DSA
       end
     end
 
-    # Check if an element exists in the tree.
+    # Check if an item exists in the tree.
     #
     # - Time: O(n), since we might have to iterate every node if unbalanced
     # - Space: O(n), since we recursively iterate each node
     #
     # @param value [T]
-    # @return [bool] if the element exists in the tree
+    # @return [Boolean] if the item exists in the tree
     #
     def include? value
       each_in_order { |item| return true if item.value == value }
@@ -140,6 +144,7 @@ module DSA
     # Return a string representation of the tree
     #
     # @return [String]
+    #
     def to_s
       # TODO
     end
