@@ -2,14 +2,20 @@ source "https://rubygems.org"
 
 gemspec
 
-# debugging
-gem "debug", ">= 1.0.0"
-gem "pry"
-gem "pry-byebug"
+group :development, :test do
+  gem "rake", require: false
 
-gem "rake"      # dev/test CLI, build system
-gem "rspec"     # testing
-gem "simplecov" # coverage
-gem "standard"  # linting
-gem "webrick"   # for `yard server`
-gem "yard"      # documentation
+  gem "debug", ">= 1.0.0", require: false
+  gem "pry", require: false
+  gem "pry-byebug", require: false
+
+  gem "standard", require: false
+
+  gem "yard", require: false
+  gem "webrick", require: false
+end
+
+group :test do
+  gem "rspec", require: false
+  gem "simplecov", require: false
+end
