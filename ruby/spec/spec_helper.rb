@@ -16,4 +16,6 @@ RSpec.configure do |config|
   config.include RSpec::Benchmark::Matchers
 end
 
+require "fiddle"
+
 require "dsa"

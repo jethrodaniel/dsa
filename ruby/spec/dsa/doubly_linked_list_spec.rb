@@ -41,6 +41,41 @@ RSpec.describe DSA::DoublyLinkedList do
     end
   end
 
+  it "takes up 72 bytes per item" do
+    lists = 1.upto(3).map do |n|
+      list = described_class.new
+      1.upto(n).each { list.prepend _1 }
+      list
+    end
+
+    sizeof = ->(obj, seen = []) do
+      next Fiddle::SIZEOF_VOIDP if seen.include?(obj.object_id)
+      seen << obj.object_id
+
+      size = ObjectSpace.memsize_of obj
+
+      obj.instance_variables.each do |ivar_name|
+        ivar = obj.instance_variable_get(ivar_name)
+        size += sizeof.call(ivar, seen)
+        size += Fiddle::SIZEOF_VOIDP
+      end
+
+      size
+    end
+
+    expect(lists[0].length).to eq 1
+    expect(sizeof.call(lists[0])).to eq 120
+    expect(sizeof.call(lists[0])).to eq 48 + 72 * 1
+
+    expect(lists[1].length).to eq 2
+    expect(sizeof.call(lists[1])).to eq 192
+    expect(sizeof.call(lists[1])).to eq 48 + 72 * 2
+
+    expect(lists[2].length).to eq 3
+    expect(sizeof.call(lists[2])).to eq 264
+    expect(sizeof.call(lists[2])).to eq 48 + 72 * 3
+  end
+
   describe "#prepend" do
     it "prepends to the beginning of the list" do
       list = described_class.new
@@ -60,6 +95,16 @@ RSpec.describe DSA::DoublyLinkedList do
       expect(tail.value).to eq 3
       expect(tail.prev.value).to eq 2
     end
+
+    it "has O(1) time complexity" do
+      list = described_class.new
+      expect { list.prepend 42 }.to perform_constant.sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      expect { list.prepend 42 }.to perform_allocation(3).and_retain(3)
+    end
   end
 
   describe "#each" do
@@ -74,6 +119,27 @@ RSpec.describe DSA::DoublyLinkedList do
         empty_list = described_class.new
         items = empty_list.each.map(&:value)
         expect(items).to eq []
+      end
+
+      it "has O(n) time complexity" do
+        lists = bench_range(1, 1_000).map do |n|
+          list = described_class.new
+          1.upto(n).each { list.prepend _1 }
+          list
+        end
+
+        expect { |n, i|
+          lists[i].each {}
+        }.to perform_linear.in_range(1, 1_000).sample(10).times
+      end
+
+      it "has O(1) space complexity" do
+        list = described_class.new
+        1.upto(1_000).each { list.prepend _1 }
+
+        expect {
+          list.each {}
+        }.to perform_allocation(1).and_retain(1)
       end
     end
 
@@ -96,6 +162,8 @@ RSpec.describe DSA::DoublyLinkedList do
 
         expect(items).to eq [2, 1]
       end
+
+      # TODO: complexity
     end
 
     context "when not given a block" do
@@ -117,6 +185,27 @@ RSpec.describe DSA::DoublyLinkedList do
       list.prepend 2
 
       expect(list.length).to eq 2
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        lists[i].length
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.length
+      }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -188,6 +277,28 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(list[1].value).to eq 2
         expect(list.length).to eq 3
       end
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list[n - 1] # worst case, accessing the last element
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list[42]
+      }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -266,6 +377,30 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(list[1]).to eq tail
         expect(list.length).to eq 2
       end
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(2, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        node = list[n - 1] # worst case, deleting the last element
+
+        list.delete(node:)
+      }.to perform_linear.in_range(2, 1_000).sample(1).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list[42]
+      }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -359,6 +494,28 @@ RSpec.describe DSA::DoublyLinkedList do
         expect(list.length).to eq 3
       end
     end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.insert value: 42, index: n - 1 # worst cast, insert at end
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.insert value: 42, index: 42
+      }.to perform_allocation(4).and_retain(4)
+    end
   end
 
   describe "#append" do
@@ -370,6 +527,28 @@ RSpec.describe DSA::DoublyLinkedList do
       expect(list[0].value).to eq 1
       expect(list[1].value).to eq 2
       expect(list.length).to eq 2
+    end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 1_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.append 42
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.append 42
+      }.to perform_allocation(3).and_retain(3)
     end
   end
 
@@ -387,6 +566,28 @@ RSpec.describe DSA::DoublyLinkedList do
       expect(list.include?(2)).to be true
       expect(list.include?(42)).to be false
     end
+
+    it "has O(n) time complexity" do
+      lists = bench_range(1, 10_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.include? 500
+      }.to perform_linear.in_range(1, 10_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect {
+        list.include? 42
+      }.to perform_allocation(1).and_retain(1)
+    end
   end
 
   describe "#empty?" do
@@ -396,6 +597,26 @@ RSpec.describe DSA::DoublyLinkedList do
 
       list.append 1
       expect(list.empty?).to be false
+    end
+
+    it "has O(1) time complexity" do
+      lists = bench_range(1, 10_000).map do |n|
+        list = described_class.new
+        1.upto(n).each { list.prepend _1 }
+        list
+      end
+
+      expect { |n, i|
+        list = lists[i]
+        list.empty?
+      }.to perform_constant.in_range(1, 10_000).sample(10).times
+    end
+
+    it "has O(1) space complexity" do
+      list = described_class.new
+      1.upto(1_000).each { list.prepend _1 }
+
+      expect { list.empty? }.to perform_allocation(1).and_retain(1)
     end
   end
 
