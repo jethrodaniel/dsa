@@ -24,13 +24,13 @@ bundle
 ## Run tests
 
 ```
-bundle exec rake
+bin/rake
 ```
 
 ## View documentation
 
 ```
-bundle exec rake doc
+bin/rake doc
 ```
 
 Then visit http://localhost:8808/
