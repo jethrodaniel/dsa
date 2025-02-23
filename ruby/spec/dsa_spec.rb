@@ -1,5 +1,5 @@
 RSpec.describe DSA do
-  context "::VERSION" do
+  describe "::VERSION" do
     subject { described_class::VERSION }
 
     it { is_expected.to eq("0.0.0") }

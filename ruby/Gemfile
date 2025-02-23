@@ -10,6 +10,7 @@ group :development, :test do
   gem "pry-byebug", require: false
 
   gem "standard", require: false
+  gem "rubocop-rspec", require: false
 
   gem "yard", require: false
   gem "webrick", require: false

@@ -21,7 +21,7 @@ RSpec.describe DSA::BinaryTree do
 
         node.left = described_class.new(value: 42)
 
-        expect(node.left).to_not be_nil
+        expect(node.left).not_to be_nil
         expect(node.left.value).to eq 42
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe DSA::BinaryTree do
 
         node.right = described_class.new(value: 42)
 
-        expect(node.right).to_not be_nil
+        expect(node.right).not_to be_nil
         expect(node.right.value).to eq 42
       end
     end
@@ -219,7 +219,7 @@ RSpec.describe DSA::BinaryTree do
 
   describe "#remove" do
     it "removes the node from the tree" do
-      skip
+      skip "TODO"
 
       tree = described_class.new
 
@@ -234,7 +234,7 @@ RSpec.describe DSA::BinaryTree do
 
   describe "#to_s" do
     it "prints the tree" do
-      skip
+      skip "TODO"
 
       tree = described_class.new
       tree.add 1

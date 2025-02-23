@@ -76,6 +76,8 @@ GEM
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rspec (3.4.0)
+      rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -113,6 +115,7 @@ DEPENDENCIES
   pry-byebug
   rake
   rspec
+  rubocop-rspec
   simplecov
   standard
   webrick

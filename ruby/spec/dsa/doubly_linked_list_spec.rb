@@ -21,7 +21,7 @@ RSpec.describe DSA::DoublyLinkedList do
 
         node.prev = described_class.new(value: 42)
 
-        expect(node.prev).to_not be_nil
+        expect(node.prev).not_to be_nil
         expect(node.prev.value).to eq 42
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe DSA::DoublyLinkedList do
 
         node.next = described_class.new(value: 42)
 
-        expect(node.next).to_not be_nil
+        expect(node.next).not_to be_nil
         expect(node.next.value).to eq 42
       end
     end
