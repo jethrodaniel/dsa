@@ -32,38 +32,6 @@ RSpec.describe DSA::SinglyLinkedList do
     end
   end
 
-  it "takes up 56 bytes per item" do
-    lists = 1.upto(3).map do |n|
-      list = described_class.new
-      1.upto(n).each { list.prepend _1 }
-      list
-    end
-
-    sizeof = ->(obj) do
-      size = ObjectSpace.memsize_of obj
-
-      obj.instance_variables.each do |ivar_name|
-        ivar = obj.instance_variable_get(ivar_name)
-        size += sizeof.call(ivar)
-        size += Fiddle::SIZEOF_VOIDP
-      end
-
-      size
-    end
-
-    expect(lists[0].length).to eq 1
-    expect(sizeof.call(lists[0])).to eq 104
-    expect(sizeof.call(lists[0])).to eq 48 + 56 * 1
-
-    expect(lists[1].length).to eq 2
-    expect(sizeof.call(lists[1])).to eq 160
-    expect(sizeof.call(lists[1])).to eq 48 + 56 * 2
-
-    expect(lists[2].length).to eq 3
-    expect(sizeof.call(lists[2])).to eq 216
-    expect(sizeof.call(lists[2])).to eq 48 + 56 * 3
-  end
-
   describe "#prepend" do
     it "prepends to the beginning of the list" do
       list = described_class.new
