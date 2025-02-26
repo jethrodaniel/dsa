@@ -66,8 +66,11 @@ RSpec.describe DSA::DoublyLinkedList do
     end
 
     it "has O(1) time complexity" do
-      list = described_class.new
-      expect { list.prepend 42 }.to perform_constant.sample(10).times
+      lists = generate_lists 1, 1_000
+
+      expect { |n, i|
+        lists[i].prepend 42
+      }.to perform_linear.in_range(1, 1_000).sample(10).times
     end
 
     it "has O(1) space complexity" do
