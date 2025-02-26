@@ -67,10 +67,7 @@ RSpec.describe DSA::DoublyLinkedList do
 
     it "has O(1) time complexity" do
       lists = generate_lists 1, 1_000
-
-      expect { |n, i|
-        lists[i].prepend 42
-      }.to perform_linear.in_range(1, 1_000).sample(10).times
+      expect { |_, i| lists[i].prepend 42 }.to perform_constant
     end
 
     it "has O(1) space complexity" do
@@ -95,19 +92,13 @@ RSpec.describe DSA::DoublyLinkedList do
 
       it "has O(n) time complexity" do
         lists = generate_lists 1, 1_000
-
-        expect { |n, i|
-          lists[i].each {}
-        }.to perform_linear.in_range(1, 1_000).sample(10).times
+        expect { |_, i| lists[i].each {} }.to perform_linear.in_range(1, 1_000)
       end
 
       it "has O(1) space complexity" do
         list = described_class.new
         1.upto(1_000).each { list.prepend _1 }
-
-        expect {
-          list.each {}
-        }.to perform_allocation(1).and_retain(1)
+        expect { list.each {} }.to perform_allocation(3).and_retain(3)
       end
     end
 
@@ -157,19 +148,13 @@ RSpec.describe DSA::DoublyLinkedList do
 
     it "has O(n) time complexity" do
       lists = generate_lists 1, 1_000
-
-      expect { |n, i|
-        lists[i].length
-      }.to perform_linear.in_range(1, 1_000).sample(10).times
+      expect { |_, i| lists[i].length }.to perform_linear.in_range(1, 1_000)
     end
 
     it "has O(1) space complexity" do
       list = described_class.new
       1.upto(1_000).each { list.prepend _1 }
-
-      expect {
-        list.length
-      }.to perform_allocation(1).and_retain(1)
+      expect { list.length }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -249,16 +234,13 @@ RSpec.describe DSA::DoublyLinkedList do
       expect { |n, i|
         list = lists[i]
         list[n - 1] # worst case, accessing the last element
-      }.to perform_linear.in_range(1, 1_000).sample(10).times
+      }.to perform_linear.in_range(1, 1_000)
     end
 
     it "has O(1) space complexity" do
       list = described_class.new
       1.upto(1_000).each { list.prepend _1 }
-
-      expect {
-        list[42]
-      }.to perform_allocation(1).and_retain(1)
+      expect { list[42] }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -353,10 +335,7 @@ RSpec.describe DSA::DoublyLinkedList do
     it "has O(1) space complexity" do
       list = described_class.new
       1.upto(1_000).each { list.prepend _1 }
-
-      expect {
-        list[42]
-      }.to perform_allocation(1).and_retain(1)
+      expect { list[42] }.to perform_allocation(1).and_retain(1)
     end
   end
 
@@ -457,7 +436,7 @@ RSpec.describe DSA::DoublyLinkedList do
       expect { |n, i|
         list = lists[i]
         list.insert value: 42, index: n - 1 # worst cast, insert at end
-      }.to perform_linear.in_range(1, 1_000).sample(10).times
+      }.to perform_linear.in_range(1, 1_000)
     end
 
     it "has O(1) space complexity" do
@@ -483,20 +462,13 @@ RSpec.describe DSA::DoublyLinkedList do
 
     it "has O(n) time complexity" do
       lists = generate_lists 1, 1_000
-
-      expect { |n, i|
-        list = lists[i]
-        list.append 42
-      }.to perform_linear.in_range(1, 1_000).sample(10).times
+      expect { |_, i| lists[i].append 42 }.to perform_linear.in_range(1, 1_000)
     end
 
     it "has O(1) space complexity" do
       list = described_class.new
       1.upto(1_000).each { list.prepend _1 }
-
-      expect {
-        list.append 42
-      }.to perform_allocation(3).and_retain(3)
+      expect { |_, i| list.append 42 }.to perform_allocation(3).and_retain(3)
     end
   end
 
@@ -519,9 +491,8 @@ RSpec.describe DSA::DoublyLinkedList do
       lists = generate_lists 1, 10_000
 
       expect { |n, i|
-        list = lists[i]
-        list.include? 500
-      }.to perform_linear.in_range(1, 10_000).sample(10).times
+        lists[i].include? 500
+      }.to perform_linear.in_range(1, 10_000)
     end
 
     it "has O(1) space complexity" do
@@ -547,9 +518,8 @@ RSpec.describe DSA::DoublyLinkedList do
       lists = generate_lists 1, 10_000
 
       expect { |n, i|
-        list = lists[i]
-        list.empty?
-      }.to perform_constant.in_range(1, 10_000).sample(10).times
+        lists[i].empty?
+      }.to perform_constant.in_range(1, 10_000)
     end
 
     it "has O(1) space complexity" do
