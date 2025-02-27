@@ -56,7 +56,6 @@ module DSA
         @children[index] = Node.new(letter:)
       end
 
-      # @param letter [String]
       # @return [Boolean]
       #
       def leaf?
