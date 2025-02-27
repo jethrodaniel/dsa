@@ -7,7 +7,6 @@ RSpec.describe DSA::Stack do
     end
   end
 
-
   describe "#push" do
     it "pushes an element to the top of the stack" do
       stack = described_class.new
