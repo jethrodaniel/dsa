@@ -16,6 +16,7 @@ RSpec.describe DSA do
         "LICENSE.txt",
         "README.md",
         "lib/dsa.rb",
+        "lib/dsa/array_list.rb",
         "lib/dsa/binary_tree.rb",
         "lib/dsa/deque.rb",
         "lib/dsa/doubly_linked_list.rb",
