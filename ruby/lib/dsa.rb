@@ -4,6 +4,7 @@ require_relative "dsa/stack"
 require_relative "dsa/queue"
 require_relative "dsa/deque"
 require_relative "dsa/binary_tree"
+require_relative "dsa/trie"
 
 # Data structures and algorithms practice.
 module DSA
