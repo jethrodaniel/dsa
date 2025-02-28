@@ -25,8 +25,10 @@ RSpec.describe DSA::ArrayList do
       list = described_class.new
       expect(list.length).to eq 0
 
-      list[0] = 42
-      expect(list.length).to eq 1
+      list[0] = 1
+      list[1] = 2
+      list[1] = 42
+      expect(list.length).to eq 2
     end
   end
 
@@ -73,7 +75,13 @@ RSpec.describe DSA::ArrayList do
 
     context "when index is greater than or equal to the capacity" do
       it "resizes the array and sets the item at that index" do
-        skip "TODO"
+        list = described_class.new
+        expect(list.capacity).to eq 100
+
+        list[101] = 42
+        expect(list[101]).to eq 42
+        expect(list.capacity).to eq 200
+        expect(list.length).to eq 102
       end
     end
   end

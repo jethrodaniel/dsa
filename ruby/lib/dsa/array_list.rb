@@ -25,8 +25,6 @@ module DSA
 
       raise ArgumentError, "index out of bounds" if index > @length - 1
 
-      @length = index + 1 if index + 1 > @length
-
       @array[index]
     end
 
@@ -37,7 +35,17 @@ module DSA
     def []= index, item
       raise ArgumentError, "index must be >= 0" if index.negative?
 
-      raise ArgumentError, "TODO" if index > @capacity
+      if index > @capacity
+        new_capacity = capacity * 2
+        new_array = Array.new(new_capacity) { nil }
+
+        0.upto(@capacity) do |i|
+          new_array[i] = @array[i]
+        end
+
+        @capacity = new_capacity
+        @array = new_array
+      end
 
       @length = index + 1 if index + 1 > @length
 
