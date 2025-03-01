@@ -22,7 +22,7 @@ pub fn SinglyLinkedList(comptime T: type) type {
         allocator: std.mem.Allocator,
         root: ?*Node(T),
 
-        /// Deinitialize with `deinit`.
+        /// Create a new list.
         ///
         pub fn init(allocator: std.mem.Allocator) Self {
             return Self{
