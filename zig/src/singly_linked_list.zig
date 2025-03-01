@@ -40,14 +40,14 @@ pub fn SinglyLinkedList(comptime T: type) type {
             self.* = undefined;
         }
 
-        pub fn prepend(self: *Self, item: T) !T {
+        pub fn prepend(self: *Self, item: T) !*Node(T) {
             const node = try self.allocator.create(Node(T));
             node.value = item;
             node.next = self.root;
 
             self.root = node;
 
-            return item;
+            return node;
         }
 
         pub fn length(self: *Self) usize {
@@ -66,7 +66,7 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return sum;
         }
 
-        pub fn append(self: *Self, item: T) !T {
+        pub fn append(self: *Self, item: T) !*Node(T) {
             if (self.root) |root| {
                 var current = root;
                 while (current.next) |next| {
@@ -77,15 +77,15 @@ pub fn SinglyLinkedList(comptime T: type) type {
                 last.next = null;
 
                 current.next = last;
-            } else {
-                const node = try self.allocator.create(Node(T));
-                node.value = item;
-                node.next = null;
-
-                self.root = node;
+                return last;
             }
 
-            return item;
+            const node = try self.allocator.create(Node(T));
+            node.value = item;
+            node.next = null;
+
+            self.root = node;
+            return node;
         }
 
         pub fn get(self: *Self, index: usize) !*Node(T) {
@@ -154,16 +154,16 @@ test "prepend" {
     var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    const item = try list.prepend(42);
-    try testing.expectEqual(@as(i32, 42), item);
+    const node = try list.prepend(42);
+    try testing.expectEqual(@as(i32, 42), node.value);
 }
 
 test "append" {
     var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    const item = try list.append(42);
-    try testing.expectEqual(@as(i32, 42), item);
+    const node = try list.append(42);
+    try testing.expectEqual(@as(i32, 42), node.value);
 }
 
 test "length" {
