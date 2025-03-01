@@ -28,15 +28,11 @@ pub fn SinglyLinkedList(comptime T: type) type {
             if (self.root) |root| {
                 var node = root;
 
-                if (node.next == null) {
+                while (node.next) |next| {
                     self.allocator.destroy(node);
-                } else {
-                    while (node.next) |next| {
-                        self.allocator.destroy(node);
-                        node = next;
-                    }
-                    self.allocator.destroy(node);
+                    node = next;
                 }
+                self.allocator.destroy(node);
             }
 
             self.* = undefined;
@@ -44,8 +40,7 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
         pub fn prepend(self: *Self, item: T) !*Node(T) {
             const node = try self.allocator.create(Node(T));
-            node.value = item;
-            node.next = self.root;
+            node.* = Node(T){ .value = item, .next = self.root };
 
             self.root = node;
 
@@ -75,16 +70,14 @@ pub fn SinglyLinkedList(comptime T: type) type {
                     current = next;
                 }
                 const last = try self.allocator.create(Node(T));
-                last.value = item;
-                last.next = null;
+                last.* = Node(T){ .value = item, .next = null };
 
                 current.next = last;
                 return last;
             }
 
             const node = try self.allocator.create(Node(T));
-            node.value = item;
-            node.next = null;
+            node.* = Node(T){ .value = item, .next = null };
 
             self.root = node;
             return node;
@@ -153,8 +146,7 @@ pub fn SinglyLinkedList(comptime T: type) type {
                 while (current.next) |next| {
                     if (current_index + 1 == index) {
                         const node = try self.allocator.create(Node(T));
-                        node.value = item;
-                        node.next = next;
+                        node.* = Node(T){ .value = item, .next = next };
 
                         current.next = node;
 
@@ -166,8 +158,7 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
                 if (current_index + 1 == index) {
                     const node = try self.allocator.create(Node(T));
-                    node.value = item;
-                    node.next = null;
+                    node.* = Node(T){ .value = item, .next = null };
 
                     current.next = node;
 
