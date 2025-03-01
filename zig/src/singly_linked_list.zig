@@ -3,8 +3,10 @@ const testing = std.testing;
 
 fn Node(comptime T: type) type {
     return struct {
+        const Self = @This();
+
         value: T,
-        next: ?*@This(),
+        next: ?*Self,
     };
 }
 
