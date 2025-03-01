@@ -115,6 +115,29 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
             return error.EmptyList;
         }
+
+        pub fn delete(self: *Self, node: *Node(T)) !void {
+            if (self.root) |root| {
+                if (root == node) {
+                    self.root = root.next;
+                    self.allocator.destroy(root);
+                    return;
+                }
+
+                var current = root;
+
+                while (current.next) |next| {
+                    if (next == node) {
+                        current.next = next.next;
+                        self.allocator.destroy(next);
+                        return;
+                    }
+                    current = next;
+                }
+            }
+
+            return error.NotInList;
+        }
     };
 }
 
@@ -181,10 +204,30 @@ test "get" {
 }
 
 test "delete" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    // TODO
+    _ = try list.append(1);
+    _ = try list.append(2);
+    _ = try list.append(3);
+
+    var missing = Node(i32){ .next = null, .value = 42 };
+    try testing.expectError(error.NotInList, list.delete(&missing));
+
+    const one = try list.get(0);
+    const two = try list.get(1);
+    const three = try list.get(2);
+
+    try testing.expectEqual(@as(usize, 3), list.length());
+
+    try list.delete(three);
+    try testing.expectEqual(@as(usize, 2), list.length());
+
+    try list.delete(two);
+    try testing.expectEqual(@as(usize, 1), list.length());
+
+    try list.delete(one);
+    try testing.expectEqual(@as(usize, 0), list.length());
 }
 
 test "insert" {
