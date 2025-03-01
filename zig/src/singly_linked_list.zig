@@ -10,6 +10,11 @@ fn Node(comptime T: type) type {
     };
 }
 
+/// A singly linked list.
+///
+/// Each item in the list contains a value and an optional pointer to the next
+/// item in the list.
+///
 pub fn SinglyLinkedList(comptime T: type) type {
     return struct {
         const Self = @This();
@@ -17,6 +22,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
         allocator: std.mem.Allocator,
         root: ?*Node(T),
 
+        /// Deinitialize with `deinit`.
+        ///
         pub fn init(allocator: std.mem.Allocator) Self {
             return Self{
                 .root = null,
@@ -24,6 +31,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             };
         }
 
+        /// Release all allocated memory.
+        ///
         pub fn deinit(self: *Self) void {
             if (self.root) |root| {
                 var node = root;
@@ -38,6 +47,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             self.* = undefined;
         }
 
+        /// Add an item to the beginning of the list.
+        ///
         pub fn prepend(self: *Self, item: T) !*Node(T) {
             const node = try self.allocator.create(Node(T));
             node.* = Node(T){ .value = item, .next = self.root };
@@ -47,6 +58,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return node;
         }
 
+        /// Count how many items are in the list.
+        ///
         pub fn length(self: *Self) usize {
             var sum: usize = 0;
 
@@ -63,6 +76,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return sum;
         }
 
+        /// Append an item to the end of the list.
+        ///
         pub fn append(self: *Self, item: T) !*Node(T) {
             if (self.root) |root| {
                 var current = root;
@@ -83,6 +98,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return node;
         }
 
+        /// Get the node at the given index.
+        ///
         pub fn get(self: *Self, index: usize) !*Node(T) {
             if (self.root) |root| {
                 var current = root;
@@ -111,6 +128,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return error.EmptyList;
         }
 
+        /// Delete a node.
+        ///
         pub fn delete(self: *Self, node: *Node(T)) !void {
             if (self.root) |root| {
                 if (root == node) {
@@ -134,6 +153,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return error.NotInList;
         }
 
+        /// Insert an item at the given index.
+        ///
         pub fn insert(self: *Self, item: T, index: usize) !*Node(T) {
             if (self.root) |root| {
                 if (index == 0) {
@@ -175,6 +196,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return error.IndexOutOfBounds;
         }
 
+        /// Check if an item exists in the list.
+        ///
         pub fn include(self: *Self, item: T) !bool {
             if (self.root) |root| {
                 var current = root;
@@ -193,6 +216,8 @@ pub fn SinglyLinkedList(comptime T: type) type {
             return false;
         }
 
+        /// Check if the list is empty.
+        ///
         pub fn is_empty(self: *Self) bool {
             return self.root == null;
         }

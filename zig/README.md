@@ -35,3 +35,12 @@ zig build test
 # or more verbosely
 zig build test --summary all
 ```
+
+## View documentation
+
+```
+zig build docs
+python3 -m http.server 8808 -d zig-out/docs
+```
+
+Then visit http://localhost:8808/

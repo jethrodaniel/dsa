@@ -14,6 +14,17 @@ pub fn build(b: *std.Build) void {
         b.installArtifact(lib);
     }
 
+    const docs = b.step("docs", "Install docs into zig-out/docs");
+    {
+        const install = b.addInstallDirectory(.{
+            .source_dir = lib.getEmittedDocs(),
+            .install_dir = .prefix,
+            .install_subdir = "docs",
+        });
+
+        docs.dependOn(&install.step);
+    }
+
     const test_step = b.step("test", "Run unit tests");
     {
         const names = [_][]const u8{
