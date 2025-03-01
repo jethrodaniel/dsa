@@ -76,6 +76,31 @@ fn merge_sort_from(comptime T: type, array: []T, comptime left: usize, comptime 
 
 /// Sort an array using merge sort.
 ///
+/// ```
+/// // initial unsorted array
+/// [1, 5, 4, 2, 3]
+///
+/// // divide in 2, sort the left half first
+/// // keep dividing until each subarray is of size 1
+/// [1, 5, 4] [2, 3]
+/// [1] [5, 4] [2, 3]
+/// [1] [5] [4] [2, 3]
+///
+/// // combine the subarrays
+/// [1] [4, 5] [2, 3]
+/// [1, 4, 5] [2, 3]
+///
+/// // repeat with the right half
+/// [1, 4, 5] [2] [3]
+/// [1, 4, 5] [2, 3]
+///
+/// // merge both sorted subarrays
+/// [1, 2, 3, 4, 5]
+/// ```
+///
+/// - Time: O(n log n)
+/// - Space: O(n)
+///
 pub fn merge_sort(comptime T: type, array: []T, comptime length: usize) void {
     if (length <= 1) {
         return;
