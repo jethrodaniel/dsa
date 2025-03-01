@@ -84,7 +84,7 @@ module DSA
       raise ArgumentError, "index is too large"
     end
 
-    # Delete an item
+    # Delete a node
     #
     # - Time: O(n), since we have to iterate the list to find the previous node
     # - Space: O(1), no additional space based on input size
