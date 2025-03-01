@@ -27,13 +27,47 @@ pub fn build(b: *std.Build) void {
 
     const test_step = b.step("test", "Run unit tests");
     {
-        const names = [_][]const u8{
-            "root",
-            "singly_linked_list",
-            "stack",
+        // Note: we pass a `name` to these `b.addTest` calls so that the
+        // `zig build test --summary all` output shows which tests ran.
+        //
+        // We can't use the filename itself as the `name` because `zig build`
+        // will reject it, e.g:
+        //
+        // ```
+        // panic: invalid name: 'src/root.zig'. It looks like a file path, but it is supposed to be the library or application name.
+        // ```
+        //
+        const Test = struct {
+            name: []const u8,
+            file: []const u8,
         };
-        for (names) |name| {
-            const file = b.fmt("src/{s}.zig", .{name});
+
+        const tests = [_]Test{
+            Test{
+                .name = "root",
+                .file = "src/root.zig",
+            },
+            Test{
+                .name = "singly_linked_list",
+                .file = "src/singly_linked_list.zig",
+            },
+            Test{
+                .name = "stack",
+                .file = "src/stack.zig",
+            },
+            Test{
+                .name = "insertion sort",
+                .file = "src/sorting/insertion_sort.zig",
+            },
+            Test{
+                .name = "merge sort",
+                .file = "src/sorting/merge_sort.zig",
+            },
+        };
+
+        for (tests) |test_case| {
+            const name = test_case.name;
+            const file = test_case.file;
 
             const unit_test = b.addTest(.{
                 .name = name,
