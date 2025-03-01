@@ -192,6 +192,10 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
             return false;
         }
+
+        pub fn is_empty(self: *Self) bool {
+            return self.root == null;
+        }
     };
 }
 
@@ -322,4 +326,15 @@ test "include" {
     try testing.expectEqual(true, try list.include(2));
     try testing.expectEqual(true, try list.include(3));
     try testing.expectEqual(false, try list.include(42));
+}
+
+test "is_empty" {
+    var list = SinglyLinkedList(i32).init(testing.allocator);
+    defer list.deinit();
+
+    try testing.expectEqual(true, list.is_empty());
+
+    _ = try list.append(1);
+
+    try testing.expectEqual(false, list.is_empty());
 }
