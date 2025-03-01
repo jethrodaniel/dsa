@@ -113,13 +113,39 @@ test {
     testing.refAllDecls(@This());
 }
 
-test "merge_sort" {
-    var empty = [_]u32{};
-    merge_sort(u32, &empty, empty.len);
+test "empty" {
+    var array = [_]u32{};
+    merge_sort(u32, &array, array.len);
+}
 
-    var single = [_]u32{42};
-    merge_sort(u32, &single, single.len);
+test "single " {
+    var array = [_]u32{42};
+    merge_sort(u32, &array, array.len);
+}
 
+test "worst-case, reversed" {
+    var array = [_]u32{ 5, 4, 3, 2, 1 };
+    merge_sort(u32, &array, array.len);
+
+    try testing.expectEqual(1, array[0]);
+    try testing.expectEqual(2, array[1]);
+    try testing.expectEqual(3, array[2]);
+    try testing.expectEqual(4, array[3]);
+    try testing.expectEqual(5, array[4]);
+}
+
+test "best-case, sorted" {
+    var array = [_]u32{ 5, 4, 3, 2, 1 };
+    merge_sort(u32, &array, array.len);
+
+    try testing.expectEqual(1, array[0]);
+    try testing.expectEqual(2, array[1]);
+    try testing.expectEqual(3, array[2]);
+    try testing.expectEqual(4, array[3]);
+    try testing.expectEqual(5, array[4]);
+}
+
+test "random" {
     var array = [_]u32{ 1, 5, 4, 2, 3 };
     merge_sort(u32, &array, array.len);
 
