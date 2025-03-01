@@ -181,6 +181,24 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
             return error.IndexOutOfBounds;
         }
+
+        pub fn include(self: *Self, item: T) !bool {
+            if (self.root) |root| {
+                var current = root;
+                while (current.next) |next| {
+                    if (current.value == item) {
+                        return true;
+                    }
+
+                    current = next;
+                }
+                if (current.value == item) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     };
 }
 
@@ -303,5 +321,12 @@ test "include" {
     var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    // TODO
+    _ = try list.append(1);
+    _ = try list.append(2);
+    _ = try list.append(3);
+
+    try testing.expectEqual(true, try list.include(1));
+    try testing.expectEqual(true, try list.include(2));
+    try testing.expectEqual(true, try list.include(3));
+    try testing.expectEqual(false, try list.include(42));
 }
