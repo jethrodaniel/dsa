@@ -54,11 +54,11 @@ pub fn SinglyLinkedList(comptime T: type) type {
             var sum: usize = 0;
 
             if (self.root) |root| {
-                var node = root;
+                var current = root;
                 sum += 1;
 
-                while (node.next) |next| {
-                    node = next;
+                while (current.next) |next| {
+                    current = next;
                     sum += 1;
                 }
             }
@@ -68,15 +68,15 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
         pub fn append(self: *Self, item: T) !T {
             if (self.root) |root| {
-                var node = root;
-                while (node.next) |next| {
-                    node = next;
+                var current = root;
+                while (current.next) |next| {
+                    current = next;
                 }
                 const last = try self.allocator.create(Node(T));
                 last.value = item;
                 last.next = null;
 
-                node.next = last;
+                current.next = last;
             } else {
                 const node = try self.allocator.create(Node(T));
                 node.value = item;
@@ -90,24 +90,24 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
         pub fn get(self: *Self, index: usize) !*Node(T) {
             if (self.root) |root| {
-                var node = root;
+                var current = root;
 
                 if (index == 0) {
-                    return node;
+                    return current;
                 }
 
                 var current_index: usize = 1;
 
-                while (node.next) |next| {
+                while (current.next) |next| {
                     if (current_index == index) {
                         return next;
                     }
                     current_index += 1;
-                    node = next;
+                    current = next;
                 }
 
                 if (current_index == index + 1) {
-                    return node;
+                    return current;
                 }
 
                 return error.IndexOutOfBounds;
@@ -119,48 +119,48 @@ pub fn SinglyLinkedList(comptime T: type) type {
 }
 
 test {
-    std.testing.refAllDecls(@This());
+    testing.refAllDecls(@This());
 }
 
 test "init/deinit" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 }
 
 test "prepend" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
     const item = try list.prepend(42);
-    try std.testing.expectEqual(@as(i32, 42), item);
+    try testing.expectEqual(@as(i32, 42), item);
 }
 
 test "append" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
     const item = try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), item);
+    try testing.expectEqual(@as(i32, 42), item);
 }
 
 test "length" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    try std.testing.expectEqual(@as(usize, 0), list.length());
+    try testing.expectEqual(@as(usize, 0), list.length());
 
     _ = try list.prepend(42);
-    try std.testing.expectEqual(@as(usize, 1), list.length());
+    try testing.expectEqual(@as(usize, 1), list.length());
 
     _ = try list.prepend(42);
-    try std.testing.expectEqual(@as(usize, 2), list.length());
+    try testing.expectEqual(@as(usize, 2), list.length());
 }
 
 test "get" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    try std.testing.expectError(error.EmptyList, list.get(0));
+    try testing.expectError(error.EmptyList, list.get(0));
 
     var node: *Node(i32) = undefined;
 
@@ -169,15 +169,15 @@ test "get" {
     _ = try list.append(3);
 
     node = try list.get(0);
-    try std.testing.expectEqual(@as(i32, 1), node.value);
+    try testing.expectEqual(@as(i32, 1), node.value);
 
     node = try list.get(1);
-    try std.testing.expectEqual(@as(i32, 2), node.value);
+    try testing.expectEqual(@as(i32, 2), node.value);
 
     node = try list.get(2);
-    try std.testing.expectEqual(@as(i32, 3), node.value);
+    try testing.expectEqual(@as(i32, 3), node.value);
 
-    try std.testing.expectError(error.IndexOutOfBounds, list.get(3));
+    try testing.expectError(error.IndexOutOfBounds, list.get(3));
 }
 
 test "delete" {
@@ -188,14 +188,14 @@ test "delete" {
 }
 
 test "insert" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
     // TODO
 }
 
 test "include" {
-    var list = SinglyLinkedList(i32).init(std.testing.allocator);
+    var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
     // TODO
