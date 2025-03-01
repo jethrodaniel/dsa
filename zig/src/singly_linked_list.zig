@@ -138,6 +138,49 @@ pub fn SinglyLinkedList(comptime T: type) type {
 
             return error.NotInList;
         }
+
+        pub fn insert(self: *Self, item: T, index: usize) !*Node(T) {
+            if (self.root) |root| {
+                if (index == 0) {
+                    return self.prepend(item);
+                }
+
+                var current = root;
+                var current_index: usize = 0;
+
+                while (current.next) |next| {
+                    if (current_index + 1 == index) {
+                        const node = try self.allocator.create(Node(T));
+                        node.value = item;
+                        node.next = next;
+
+                        current.next = node;
+
+                        return node;
+                    }
+                    current_index += 1;
+                    current = next;
+                }
+
+                if (current_index + 1 == index) {
+                    const node = try self.allocator.create(Node(T));
+                    node.value = item;
+                    node.next = null;
+
+                    current.next = node;
+
+                    return node;
+                }
+
+                return error.IndexOutOfBounds;
+            }
+
+            if (index == 0) {
+                return self.prepend(item);
+            }
+
+            return error.IndexOutOfBounds;
+        }
     };
 }
 
@@ -234,7 +277,26 @@ test "insert" {
     var list = SinglyLinkedList(i32).init(testing.allocator);
     defer list.deinit();
 
-    // TODO
+    var node: *Node(i32) = undefined;
+
+    node = try list.insert(1, 0);
+    try testing.expectEqual(@as(i32, 1), node.value);
+
+    node = try list.insert(2, 1);
+    try testing.expectEqual(@as(i32, 2), node.value);
+
+    node = try list.insert(3, 2);
+    try testing.expectEqual(@as(i32, 3), node.value);
+
+    const one = try list.get(0);
+    const two = try list.get(1);
+    const three = try list.get(2);
+
+    try testing.expectEqual(@as(i32, 1), one.value);
+    try testing.expectEqual(@as(i32, 2), two.value);
+    try testing.expectEqual(@as(i32, 3), three.value);
+
+    try testing.expectError(error.IndexOutOfBounds, list.insert(42, 4));
 }
 
 test "include" {
