@@ -19,6 +19,7 @@ pub fn build(b: *std.Build) void {
         const names = [_][]const u8{
             "root",
             "singly_linked_list",
+            "stack",
         };
         for (names) |name| {
             const file = b.fmt("src/{s}.zig", .{name});
