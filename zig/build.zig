@@ -56,6 +56,10 @@ pub fn build(b: *std.Build) void {
                 .file = "src/stack.zig",
             },
             Test{
+                .name = "queue",
+                .file = "src/queue.zig",
+            },
+            Test{
                 .name = "insertion sort",
                 .file = "src/sorting/insertion_sort.zig",
             },

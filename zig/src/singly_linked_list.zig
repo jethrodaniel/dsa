@@ -1,7 +1,7 @@
 const std = @import("std");
 const testing = std.testing;
 
-fn Node(comptime T: type) type {
+pub fn Node(comptime T: type) type {
     return struct {
         const Self = @This();
 
