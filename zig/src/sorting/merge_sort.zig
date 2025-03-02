@@ -123,7 +123,7 @@ test "single " {
     merge_sort(u32, &array, array.len);
 }
 
-test "worst-case, reversed" {
+test "reversed" {
     var array = [_]u32{ 5, 4, 3, 2, 1 };
     merge_sort(u32, &array, array.len);
 
@@ -134,8 +134,8 @@ test "worst-case, reversed" {
     try testing.expectEqual(5, array[4]);
 }
 
-test "best-case, sorted" {
-    var array = [_]u32{ 5, 4, 3, 2, 1 };
+test "sorted" {
+    var array = [_]u32{ 1, 2, 3, 4, 5 };
     merge_sort(u32, &array, array.len);
 
     try testing.expectEqual(1, array[0]);
