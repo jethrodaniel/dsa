@@ -63,6 +63,10 @@ pub fn build(b: *std.Build) void {
                 .name = "merge sort",
                 .file = "src/sorting/merge_sort.zig",
             },
+            Test{
+                .name = "quick sort",
+                .file = "src/sorting/quick_sort.zig",
+            },
         };
 
         for (tests) |test_case| {
