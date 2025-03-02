@@ -77,27 +77,32 @@ test "push" {
     var stack = Stack(i32).init(testing.allocator);
     defer stack.deinit();
 
-    const item = try stack.push(42);
-    try testing.expectEqual(@as(i32, 42), item);
+    const one = try stack.push(1);
+    const two = try stack.push(2);
+
+    try testing.expectEqual(@as(i32, 1), one);
+    try testing.expectEqual(@as(i32, 2), two);
 }
 
 test "peek" {
     var stack = Stack(i32).init(testing.allocator);
     defer stack.deinit();
 
-    _ = try stack.push(42);
+    _ = try stack.push(1);
+    _ = try stack.push(2);
 
-    try testing.expectEqual(@as(i32, 42), try stack.peek());
+    try testing.expectEqual(@as(i32, 2), try stack.peek());
 }
 
 test "pop" {
     var stack = Stack(i32).init(testing.allocator);
     defer stack.deinit();
 
-    _ = try stack.push(42);
+    _ = try stack.push(1);
+    _ = try stack.push(2);
     const item = try stack.pop();
 
-    try testing.expectEqual(@as(i32, 42), item);
+    try testing.expectEqual(@as(i32, 2), item);
 }
 
 test "is_empty" {
