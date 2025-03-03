@@ -36,20 +36,21 @@ module DSA
     #
     def topological_sort
       sources = DSA::Queue.new
-      result = []
-
       in_degrees = {}
+      result = []
 
       @adjacency_list.each do |vertex, edges|
         in_degrees[vertex] ||= 0
 
-        edges.each do |dest|
-          in_degrees[dest.value] ||= 0
-          in_degrees[dest.value] += 1
+        edges.each do |dest_node|
+          destination_vertex = dest_node.value
+
+          in_degrees[destination_vertex] ||= 0
+          in_degrees[destination_vertex] += 1
         end
       end
 
-      in_degrees.select { |k, v| v.zero? }.keys.each do |source|
+      in_degrees.select { |k, v| v.zero? }.each do |source, _edges|
         sources.enqueue source
       end
 
@@ -57,14 +58,14 @@ module DSA
         source = sources.dequeue
         result << source
 
-        children = @adjacency_list[source]
+        outgoing_edges = @adjacency_list[source]
 
-        children.each do |node|
-          child = node.value
+        outgoing_edges.each do |node|
+          vertex = node.value
 
-          in_degrees[child] -= 1
+          in_degrees[vertex] -= 1
 
-          sources.enqueue(child) if in_degrees[child].zero?
+          sources.enqueue(vertex) if in_degrees[vertex].zero?
         end
       end
 
