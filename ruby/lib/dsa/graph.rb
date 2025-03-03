@@ -14,7 +14,6 @@ module DSA
 
     def initialize
       @adjacency_list = {}
-      @in_degrees = {}
     end
 
     attr_reader :adjacency_list
@@ -22,14 +21,12 @@ module DSA
     def add_vertex value:
       vertex = Vertex.new(value:)
       @adjacency_list[vertex] = SinglyLinkedList.new
-      @in_degrees[vertex] ||= 0
       vertex
     end
 
     def add_edge from:, to:
       # TODO: ensure vertices are already present in the graph
       @adjacency_list.fetch(from).prepend(to)
-      @in_degrees[to] += 1
     end
 
     # Kahn’s algorithm
@@ -41,7 +38,18 @@ module DSA
       sources = DSA::Queue.new
       result = []
 
-      @in_degrees.select { |k, v| v.zero? }.keys.each do |source|
+      in_degrees = {}
+
+      @adjacency_list.each do |vertex, edges|
+        in_degrees[vertex] ||= 0
+
+        edges.each do |dest|
+          in_degrees[dest.value] ||= 0
+          in_degrees[dest.value] += 1
+        end
+      end
+
+      in_degrees.select { |k, v| v.zero? }.keys.each do |source|
         sources.enqueue source
       end
 
@@ -54,11 +62,9 @@ module DSA
         children.each do |node|
           child = node.value
 
-          @in_degrees[child] -= 1
+          in_degrees[child] -= 1
 
-          if @in_degrees[child].zero?
-            sources.enqueue child
-          end
+          sources.enqueue(child) if in_degrees[child].zero?
         end
       end
 
