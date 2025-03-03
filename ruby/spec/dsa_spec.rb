@@ -5,7 +5,7 @@ RSpec.describe DSA do
     it { is_expected.to eq("0.0.0") }
   end
 
-  it "has the correct gemspec info" do
+  it "has the correct gemspec info" do # rubocop:disable RSpec/ExampleLength
     path = File.expand_path("../../dsa.gemspec", __FILE__)
     gemspec = Gem::Specification.load path
 
@@ -20,6 +20,7 @@ RSpec.describe DSA do
         "lib/dsa/binary_tree.rb",
         "lib/dsa/deque.rb",
         "lib/dsa/doubly_linked_list.rb",
+        "lib/dsa/graph.rb",
         "lib/dsa/queue.rb",
         "lib/dsa/singly_linked_list.rb",
         "lib/dsa/stack.rb",
