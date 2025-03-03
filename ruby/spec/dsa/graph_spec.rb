@@ -28,9 +28,10 @@ RSpec.describe DSA::Graph do
   end
 
   describe "#topological_sort" do
-    it "returns a sorted list of vertices" do
+    it "returns a sorted list of vertices" do # rubocop:disable RSpec/ExampleLength
       graph = described_class.new
 
+      # stir-fry steps
       cook_veggies = graph.add_vertex(value: :cook_veggies)
       cook_meat = graph.add_vertex(value: :cook_meat)
       prep_veggies = graph.add_vertex(value: :prep_veggies)
@@ -46,6 +47,7 @@ RSpec.describe DSA::Graph do
       graph.add_edge(from: prep_veggies, to: cook_veggies)
       graph.add_edge(from: prep_meat, to: cook_meat)
 
+      graph.add_edge(from: cook_meat, to: cook_veggies)
       graph.add_edge(from: cook_veggies, to: serve_meal)
       graph.add_edge(from: cook_meat, to: serve_meal)
       graph.add_edge(from: cook_rice, to: serve_meal)
