@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.metadata["rubygems_mfa_required"] = "true"
   spec.license = "MIT"
 
-  spec.summary = "Data structures and algorithms"
+  spec.summary = "Data structures and algorithms practice"
   spec.files = %w[
     README.md
     LICENSE.txt

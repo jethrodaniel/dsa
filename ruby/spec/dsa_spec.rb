@@ -31,7 +31,7 @@ RSpec.describe DSA do
       metadata: {"rubygems_mfa_required" => "true"},
       require_paths: ["lib"],
       required_ruby_version: Gem::Requirement.new([">= 3.1.0"]),
-      summary: "Data structures and algorithms"
+      summary: "Data structures and algorithms practice"
     )
   end
 end
