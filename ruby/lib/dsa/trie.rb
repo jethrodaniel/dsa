@@ -1,6 +1,13 @@
 module DSA
   # A trie, or a prefix tree.
   #
+  # Each node contains a letter and an array of child nodes.
+  #
+  # The child nodes arrays have a fixed size, and currently only support a
+  # limited subset of ASCII characters.
+  #
+  # Each node knows if it represents a complete word.
+  #
   class Trie
     class Node
       UPPERCASE = ("A".."Z")
