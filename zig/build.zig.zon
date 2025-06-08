@@ -1,7 +1,8 @@
 .{
-    .name = "dsa",
+    .name = .dsa,
+    .fingerprint = 0x8e38c115fdcbd19c,
     .version = "0.0.0",
-    .minimum_zig_version = "0.13.0",
+    .minimum_zig_version = "0.14.1",
     .dependencies = .{},
     .paths = .{
         "build.zig",
